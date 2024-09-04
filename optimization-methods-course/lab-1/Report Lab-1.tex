@@ -1,0 +1,381 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T2A]{fontenc}
+\usepackage[russian]{babel}
+\usepackage{amsfonts}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{arcs}
+\usepackage{fancyhdr}
+\usepackage{float}
+\usepackage[left=3cm,right=3cm,top=3cm,bottom=3cm]{geometry}
+\usepackage{graphicx}
+\usepackage{setspace}
+\DeclareGraphicsExtensions{.png, .jpeg}
+\usepackage{hyperref}
+\usepackage{multicol}
+\usepackage{stackrel}
+\usepackage{xcolor}
+\usepackage{minted}
+\usepackage{caption}
+\usepackage{amsmath}
+
+\begin{document}
+\begin{titlepage}
+    \bfseries 
+        {\centering
+            \vspace*{14em}
+            \Huge Методы оптимизации\par
+            \bigbreak
+            Отчёт по лабораторной работе №1 \par
+        }
+    \vspace{20em}
+    \begin{spacing}{2}
+        \begin{flushright}
+            {\Large \textbf{Выполнили:}}  \\
+            {\large Евсеева Арина M3234} \\
+            {\large Шульпин Егор M3232} \\
+            {\large Гаврилюк Виталий M3232} \\ 
+        \end{flushright}
+    \end{spacing}
+\end{titlepage}
+
+\newpage
+\section*{Постановка задачи}
+\subsection*{1. Градиентный спуск с постоянным шагом (learning rate);}
+\subsection*{2. Градиентный спуск на основе одномерного поиска (dichotomy);}
+\subsection*{3. Метод Нелдера-Мида;}
+\subsection*{4. Анализ эффективности каждого из методов на примере квадратичных функций двух переменных:}
+\begin{itemize}
+    \item \textbf{Исследование сходимости и количества итераций для каждой функции с использованием разных методов;}
+    \item \textbf{Исследование работы методов в зависимости от выбранной начальной точки;}
+    \item \textbf{Иллюстрация работы методов с помощью графиков и таблиц;}
+\end{itemize}
+\subsection*{5. Дополнительная реализация градиентного спуска на основе одномерного поиска (golden ratio);}
+\subsection*{6. Исследование реализованных методов в сложных случаях:}
+\begin{itemize}
+    \item \textbf{Исследование эффективности методов на функциях n переменных, в зависимости от размерности пространства n;}
+    \item \textbf{Исследование эффективности методов на плохо обусловленных функциях двух переменных;}
+    \item \textbf{Исследование эффективности методов на функциях с зашумленными значениями и на мультимодальных функциях.}
+\end{itemize}
+
+\newpage
+\section*{Градиентный спуск с постоянным шагом (learning rate)}
+\subsection*{Описание метода}
+Градиентный спуск - эвристический алгоритм, который, пользуясь градиентом функции, двигается в направлении скорейшего убывания функции, пошагово рассчитывая новые значения функции. При довольно маленьких изменениях значений (меньше выбранного $\mathcal{E}$) алгоритм завершает работу в точке найденного минимума функции.
+\subsection*{Релизация метода}
+Алгоритм градиентного спуска:
+\begin{enumerate}
+    \item Выбор начальной точки $x = (x_0, \dots, x_n)$ - начальное приближение.
+    \item На каждой итерации вычисляется новое значение аргумента функции:
+    
+    $x_{i+1} = x_i - \alpha \cdot \nabla f(x_i)$, где $\alpha$ - выбранный шаг (learning rate).
+    \item Условие останова: $|| f(x_{i+1}) - f(x_i) || < \mathcal{E}$.
+\end{enumerate}
+\section*{Градиентный спуск на основе дихотомии}
+\subsection*{Описание одномерного поиска (dichotomy)}
+Метод дихотомии - метод, основанный на делении текущего отрезка $[a, b]$, содержащего экстремум, на две равные части с последующим выбором одной из половин в качестве следующего отрезка.
+При довольно маленькой длине отрезка (меньше выбранного $\mathcal{E}$) алгоритм завершает работу.
+\subsection*{Реализация одномерного поиска (dichotomy)}
+Алгоритм дихотомии:
+\begin{enumerate}
+    \item Выбор границ отрезка $[a, b]$, вычисление начальных точек $x_1$ и $x_2$:
+
+    $x_1 = \dfrac{a + b}{2} - \delta$, \; $x_2 = \dfrac{a + b}{2} + \delta$.
+    \item \begin{itemize}
+        \item $f(x_1) \geq f(x_2)$: смещаем левую границу к $x_1$;
+        \item $f(x_1) < f(x_2)$: смещаем правую границу к $x_2$.
+    \end{itemize}
+    \item Условие останова: $b - a < \mathcal{E}$.
+\end{enumerate}
+\subsection*{Реализация градиентного спуска при помощи дихотомии}
+При фиксированном шаге мы сталкиваемся с проблемой выбора шага, который влияет на работоспособность градиентного спуска. Неправильный выбор шага (learning rate) приводит к неэффективности: при слишком маленьком замедляется процесс, при слишком быстром происходят перепрыгивания минимума. Чтобы избежать данной проблемы, можно использовать метод дихотомии для поиска оптимального шага: встаем вдоль определенного направления и подбираем шаг одномерным поиском на отрезке с довольно малыми значениями (в нашем случае $l = \mathcal{E}, r = 0.5$).
+
+\newpage
+\section*{Метод Нелдера-Мида}
+\subsection*{Описание метода}
+Метод Нелдера-Мида - метод оптимизации функции от нескольких переменных, не использующий градиентов функции. Основной идеей метода является перемещение и деформация симплекса вокруг точки локального экстремума. Данный метод считается довольно надежным и практичным при работе с негладкими функциями, однако у него полностью отсутсвует теория сходимости.
+\subsection*{Реализация метода}
+Реализация метода Нелдера-Мида взята из библиотеки scipy.optimize, анализ эффективности которой будет рассмотрен далее.
+\section*{Градиентный спуск на основе золотого сечения}
+\subsection*{Описание одномерного поиска (golden ratio)}
+Метод золотого сечения - метод, основанный на делении текущего отрезка $[a, b]$, содержащего экстремум, на две неравные части, для которых будет выполнено правило золотого сечения:
+\vspace{.5em}
+
+\noindent $\dfrac{b - x_1}{x_1 - a} = \dfrac{x_2 - a}{x_1 - a} = \phi = \dfrac{1 + \sqrt{5}}{2}.$
+\vspace {.5em}
+
+\noindent При довольно маленькой длине отрезка (меньше выбранного $\mathcal{E}$) алгоритм завершает работу.
+\subsection*{Реализация одномерного поиска (golden ratio)}
+Алгоритм золотого сечения:
+\begin{enumerate}
+    \item Выбор границ отрезка $[a, b]$, вычисление начальных точек $x_1$ и $x_2$:
+
+    $x_1 = b - \dfrac{b - a}{\phi}$, \; $x_2 = a + \dfrac{b - a}{\phi}$.
+    \item \begin{itemize}
+        \item $f(x_1) \geq f(x_2)$: смещаем левую границу к $x_1$;
+        \item $f(x_1) < f(x_2)$: смещаем правую границу к $x_2$.
+    \end{itemize}
+    \item Условие останова: $b - a < \mathcal{E}$.
+\end{enumerate}
+\subsection*{Реализация градиентного спуска на основе золотого сечения}
+В реализации градиентного спуска на основе дихомотии мы смогли избавиться от фиксированного шага, тем самым убрав проблему с неэффективностью. Однако метод золотого имеет преимущество в более быстрой сходимости. Поэтому заменим поиск шага по направлению с метода дихотомии на метод золотого сечения, что позволит тратить меньше времени на вычисление функции.
+
+\newpage
+\section*{Анализ эффективности методов}
+\subsection*{Выбор исследуемых функций}
+1) $f = x^2 \cdot y^2 \cdot \ln{(4 \cdot x^2 + y^2)}$ \\
+
+\noindent Данная функция содержит 4 минимума:
+\begin{itemize}
+    \item $f(\dfrac{1}{2\sqrt{2}\sqrt[4]{e}}, \dfrac{1}{\sqrt{2}\sqrt[4]{e}}) = -\dfrac{1}{32e}$
+    \item $f(\dfrac{1}{2\sqrt{2}\sqrt[4]{e}}, -\dfrac{1}{\sqrt{2}\sqrt[4]{e}}) = -\dfrac{1}{32e}$;
+    \item $f(-\dfrac{1}{2\sqrt{2}\sqrt[4]{e}}, \dfrac{1}{\sqrt{2}\sqrt[4]{e}}) = -\dfrac{1}{32e}$;
+    \item $f(-\dfrac{1}{2\sqrt{2}\sqrt[4]{e}}, -\dfrac{1}{\sqrt{2}\sqrt[4]{e}}) = -\dfrac{1}{32e}$.
+\end{itemize}
+
+\noindent Она хорошо подходит для проверки сходимости и количества затрачиваемых итераций.\\
+
+\noindent 2) $f = -\cos{x} \cdot \cos{y} \cdot \exp{(-((x - \pi)^2 + (y - \pi)^2))}$ (функция Изома)\\
+
+\noindent Данная функция содержит 1 глобальный минимум:
+\begin{itemize}
+    \item $f(\pi, \pi) = -1$.
+\end{itemize}
+
+\noindent Она подойдет для проверки работоспособности каждого метода при различном выборе начальных точек.
+\subsection*{Исследование сходимости и количества итераций}
+\subsubsection*{Начальные параметры:}
+\begin{itemize}
+    \item $f = x^2 \cdot y^2 \cdot \ln{(4 \cdot x^2 + y^2)}$;
+    \item $\mathcal{E} \in \{10^{-3}, 10^{-5}, 10^{-7}$\};
+    \item learning rate $= 10^{-2}$ (при использовании фиксированного шага);
+    \item $l = \mathcal{E}, r = 0.5$ (при использовании метода дихотомии или золотого сечения).
+\end{itemize}
+\subsubsection*{Количество итераций и обращений к минимизируемой функции в зависимости от выбранной точности:} 
+
+\includegraphics[scale=0.35]{first_example_result.jpeg}
+
+\newpage
+\begin{center}
+    \includegraphics[scale=0.35]{first_example_standard_3d.png}
+    \includegraphics[scale=0.30]{first_example_standard_2d.png}
+    \captionof{figure}{Градиентный спуск с фиксированным шагом}
+    \label{fig:enter-label}
+\end{center}
+\begin{center}
+    \includegraphics[scale=0.35]{first_example_dichotomy_3d.png}
+    \includegraphics[scale=0.30]{first_example_dichotomy_2d.png}
+    \captionof{figure}{Градиентный спуск на основе дихотомии}
+    \label{fig:enter-label}
+\end{center}
+\begin{center}
+    \includegraphics[scale=0.35]{first_example_golden_ratio_3d.png}
+    \includegraphics[scale=0.30]{first_example_golden_ratio_2d.png}
+    \captionof{figure}{Градиентный спуск на основе золотого сечения}
+    \label{fig:enter-label}
+\end{center}
+\begin{center}
+    \includegraphics[scale=0.35]{first_example_nelder_mead_3d.png}
+    \includegraphics[scale=0.30]{first_example_nelder_mead_2d.png}
+    \captionof{figure}{Метод Нелдера-Мида} 
+    \label{fig:enter-label}
+\end{center}
+
+\qquad
+
+\subsubsection*{Сравнение вычисленных значений:} 
+
+\noindent При запуске из точки $x = (-1, 1)$ ожидаемым значением является $(x, y) \approx (-0.275348, 0.550695)$, $f((x, y)) \approx -0.0114962$. \\
+
+\noindent Значения, вычисленные с помощью разных методов: \\
+
+\noindent \includegraphics[scale=0.35]{first_example_result2.jpeg}
+\subsection*{Исследование работоспособности в зависимости от выбранной начальной точки}
+\subsubsection*{Начальные параметры:}
+\begin{itemize}
+    \item $f = -\cos{x} \cdot \cos{y} \cdot \exp{(-((x - \pi)^2 + (y - \pi)^2))}$;
+    \item $\mathcal{E} = 10^{-5}$;
+    \item learning rate = $10^{-2}$ (при использовании фиксированного шага);
+    \item $l = \mathcal{E}, r = 0.5$ (при использовании метода дихотомии или золотого сечения).
+\end{itemize}
+\subsubsection*{Выбор начальной точки}
+Функция Изома имеет один глобальный минимум: $f((\pi, \pi)) = -1$. Для каждого метода будем подбирать радиус его работоспособности с помощью бинарного поиска. Левая граница - $(0, 0)$, правая граница - $(\pi, \pi)$, $x = y$, тогда на каждой итерации будем проверять работу метода. В конце остановимся в точке, начиная с которой метод находит верный минимум.
+\subsubsection*{Градиентный спуск с постоянным шагом}
+С помощью бинарного поиска найденная точка - $(1.89, 1.89)$ (результат округлен до сотых). \\ Рассчитаем радиус работоспособности: $R = \sqrt{|\pi - 1.89|^2 + |\pi - 1.89|^2} = \sqrt{2 \cdot 1.5665} \approx 1.77$.
+\begin{center}
+    \includegraphics[scale=0.35]{second_example_standard_3d.png}
+    \includegraphics[scale=0.30]{second_example_standard_2d.png}
+    \captionof{figure}{Радиус работоспособности градиентного спуска с фиксированным шагом} 
+    \label{fig:enter-label}
+\end{center}
+\subsubsection*{Градиентный спуск на основе дихотомии/золотого сечения}
+С помощью бинарного поиска найденная точка - $(1.71, 1.71)$ (результат округлен до сотых). \\ Рассчитаем радиус работоспособности: $R = \sqrt{|\pi - 1.71|^2 + |\pi - 1.71|^2} = \sqrt{2 \cdot 2.0495} \approx 2.0246$.
+\begin{center}
+    \includegraphics[scale=0.35]{second_example_dichotomy_golden_ratio_3d.png}
+    \includegraphics[scale=0.30]{second_example_dichotomy_golden_ratio_2d.png}
+    \captionof{figure}{Радиус работоспособности градиентного спуска на основе дихотомии/золотого сечения} 
+    \label{fig:enter-label}
+\end{center}
+\subsubsection*{Метод Нелдера-Мида}
+С помощью бинарного поиска найденная точка - $(1.56, 1.56)$ (результат округлен до сотых). \\ Рассчитаем радиус работоспособности: $R = \sqrt{|\pi - 1.56|^2 + |\pi - 1.56|^2} = \sqrt{2 \cdot 2.5014} \approx 2.2367$.
+\begin{center}
+    \includegraphics[scale=0.35]{second_example_nelder_mead_3d.png}
+    \includegraphics[scale=0.30]{second_example_nelder_mead_2d.png}
+    \captionof{figure}{Радиус работоспособности метода Нелдера-Мида} 
+    \label{fig:enter-label}
+\end{center}
+\subsubsection*{Полученные результаты}
+\includegraphics[scale=0.3]{second_example_result.jpeg}
+
+\newpage
+\section*{Исследование реализованных методов в сложных случаях}
+\subsection*{Исследование эффективности методов на функциях n переменных}
+\subsubsection*{Выбор функций:}
+\begin{itemize}
+    \item $f = x_1^2 \cdot x_2^2 \cdot \ln{(4 \cdot x_1^2 + x_2^2)}$ в $\mathbb{R}^3$, начальная точка - $(-1, 1)$, ожидаемый минимум = $-\dfrac{1}{32e}$;
+    \item $f = 7 \cdot x_1^2 + 3 \cdot x_2^2 + 2 \cdot x_3^2$ в $\mathbb{R}^4$, начальная точка - $(-1, 5, 2)$, ожидаемый минимум = $0$;
+    \item $f = 15 \cdot x_1^2 \cdot \ln{(x_1^2 + x_3^2)} + x_2^2 + x_4^2$ в $\mathbb{R}^5$, начальная точка - $(3, 2, 1, 0)$, ожидаемый минимум = $-\dfrac{15}{e}$;
+    \item $f = 6 \cdot x_1^2 + x_2^2 + 2 \cdot x_3^2 + x_4^2 + 11 \cdot x_5^2$ в $\mathbb{R}^6$, начальная точка - $(7, 2, 2, -1, 1)$, ожидаемый минимум = $0$.
+\end{itemize}
+\subsubsection*{Градиентный спуск с фиксированным шагом}
+\includegraphics[scale=0.25]{third_example_standard_result.jpeg}
+\subsubsection*{Градиентный спуск на основе дихотомии/золотого сечения}
+\includegraphics[scale=0.25]{third_example_dichotomy_result.jpeg}
+\subsubsection*{Метод Нелдера-Мида}
+\includegraphics[scale=0.25]{third_example_nelder_mead_result.jpeg}
+\subsubsection*{Полученные результаты:}
+При нахождении оптимумов в $\mathbb{R}^n$ появляется большая проблема использования градиентного спуска: нахождение всех частных производных. При использовании фиксированного шага, помимо прочих проблем, на каждой итерации вычисляется $n$ производных по каждому направлению, что очень сказывается на производительности. Большого количества вычислений градиентов можно избежать, если динамически находить шаг на каждой итерации, однако метод одномерного поиска тоже занимает большую часть времени при $n$ переменных. Решением будет использование метода Нелдера-Мида, который не использует производные по каждому из направлений и вычисляет функцию на порядок меньше раз (как показано в примере).
+\subsection*{Исследование эффективности методов на плохо обусловленных функциях двух переменных}
+Число обусловленности отвечает за величину изменения значения функции при небольшом изменении ее аргументов и считается как $\mu(x) = \max_{x} \frac{\mathcal{E}_y}{\mathcal{E}_x}$. Тогда плохо обусловленной можно назвать такую функцию, число обусловленности которой $\ne$ 1, а ее линии уровня образуют эллипсы с малой полуосью, которая в несколько раз меньше большей. Хорошим примером такой функции является $f = 100 \cdot x^2 + y^2$, так как значение функции увеличивается во много раз больше, чем ее аргумент $x$.
+\subsubsection*{Начальные параметры:}
+\begin{itemize}
+    \item $f = 100 \cdot x^2 + y^2$;
+    \item $\mathcal{E} = 10^{-5}$;
+    \item $(x_0, y_0) = (-1, 1)$;
+    \item learning rate $\in \{10^{-2}, 10^{-3}\}$ (при использовании фиксированного шага);
+    \item $l = \mathcal{E}, r = 0.5$ (при использовании метода дихотомии или золотого сечения).
+\end{itemize}
+\subsubsection*{Градиентный спуск с постоянным шагом}
+При использовании фиксированного шага = $10^{-2}$ была выявлена проблема с работоспособностью: градиентный спуск двигался в неверном направлении. Это возникает из-за того, что на каждой итерации $x_i = (-1)^{i + 1}$, не позволяя градиентному спуску двигаться по оси $x$.
+\begin{center}
+    \includegraphics[scale=0.35]{fourth_example_standard_3d.png}
+    \includegraphics[scale=0.30]{fourth_example_standard_2d.png}
+    \captionof{figure}{Градиентный спуск с фиксированным шагом $10^{-2}$}
+    \label{fig:enter-label}
+\end{center}
+Данную проблему решает смена значения шага на $10^{-3}$.
+\begin{center}
+    \includegraphics[scale=0.35]{fourth_example_standard2_3d.png}
+    \includegraphics[scale=0.30]{fourth_example_standard2_2d.png}
+    \captionof{figure}{Градиентный спуск с фиксированным шагом $10^{-3}$}
+    \label{fig:enter-label}
+\end{center}
+Такое решение является совершенно непрактичным, так как невозможно каждый раз предугадывать минимизируемую функцию и необходимый для нее шаг.
+\subsubsection*{Градиентный шаг на основе дихотомии/золотого сечения}
+Хорошим решением предыдущей проблемы является динамический выбор шага, который можно находить с помощью методов одномерного поиска, например, дихотомии или золотого сечения.
+\begin{center}
+    \includegraphics[scale=0.35]{fourth_example_dichotomy_3d.png}
+    \includegraphics[scale=0.30]{fourth_example_dichotomy_2d.png}
+    \captionof{figure}{Градиентый спуск на основе метода дихотомии/золотого сечения}
+    \label{fig:enter-label}
+\end{center}
+\subsubsection*{Метод Нелдера-Мида}
+Еще одним способом избавиться от данной проблемы является выбор другого метода нахождения минимума функции. Метод Нелдера-Мида использует перемещение и деформирование симплекса, точки которого сравниваются по значению функции в них, не давая стоять на месте (в случае с данной функцией по оси $x$).
+\begin{center}
+    \includegraphics[scale=0.35]{fourth_example_nelder_mead_3d.png}
+    \includegraphics[scale=0.30]{fourth_example_nelder_mead_2d.png}
+    \captionof{figure}{Метод Нелдера-Мида}
+    \label{fig:enter-label}
+\end{center}
+\subsection*{Исследование эффективности методов на функциях с зашумленными значениями}
+\[
+f = 
+    \left\{
+        \begin{aligned}
+            &x^2 + y^2 + \delta \text{, где } \delta \in [0, 0.15] \text{, если } x \not \approx 0 \text{ и } y \not \approx 0; \\
+            & 0 \text{, иначе}.
+        \end{aligned}
+    \right.
+\]
+\subsubsection*{Градиентный спуск с фиксированным шагом}
+\begin{center}
+    \includegraphics[scale=0.35]{fifth_example_standard_3d.png}
+    \includegraphics[scale=0.30]{fifth_example_standard_2d.png}
+    \captionof{figure}{Градиентный спуск с фиксированным шагом}
+    \label{fig:enter-label}
+\end{center}
+\subsubsection*{Градиентный шаг на основе дихотомии/золотого сечения}
+\begin{center}
+    \includegraphics[scale=0.35]{fifth_example_dichotomy_3d.png}
+    \includegraphics[scale=0.30]{fifth_example_dichotomy_2d.png}
+    \captionof{figure}{Градиентный спуск на основе метода дихотомии/золотого сечения}
+    \label{fig:enter-label}
+\end{center}
+\subsubsection*{Метод Нелдера-Мида}
+\begin{center}
+    \includegraphics[scale=0.35]{fifth_example_nelder_mead_3d.png}
+    \includegraphics[scale=0.30]{fifth_example_nelder_mead_2d.png}
+    \captionof{figure}{Метод Нелдера-Мида}
+    \label{fig:enter-label}
+\end{center}
+\subsubsection*{Полученные результаты:}
+Хотя все три метода справились с нахождением оптимума на функции из примера, лучшим методом для работы с функциями с зашумленными значениями является метод Нелдера-Мида, который не использует производные по направлениям. 
+\subsection*{Исследование эффективности методов на мультимодальных функциях}
+Мультимодальная функция - это функция, имеющая более чем один оптимум. Такие функции являются невыпуклыми, могут иметь ложные оптимумы или несколько глобальных сразу. Мультимодальной функцией двух переменных является функция Химмельблау $f = (x^2 + y - 11)^2 + (x + y^2 - 7)^2$. Она имеет четыре развнозначных минимума:
+\begin{itemize}
+    \item $f(3, 2) = 0$;
+    \item $f(3.584428\dots, -1.848126\dots) = 0$;
+    \item $f(-2.805118\dots, 3.131312\dots) = 0$;
+    \item $f(-3.779310\dots, -3.283186\dots) = 0$.
+\end{itemize}
+\subsubsection*{Начальные параметры:}
+\begin{itemize}
+    \item $f = (x^2 + y - 11)^2 + (x + y^2 - 7)^2$;
+    \item $\mathcal{E} = 10^{-5}$;
+    \item $(x_0, y_0) \in \{(0, 0), (0, -4)\}$;
+    \item learning rate $= 10^{-2}$ (при использовании фиксированного шага);
+    \item $l = \mathcal{E}, r = 0.5$ (при использовании метода дихотомии или золотого сечения).
+\end{itemize}
+\subsubsection*{Градиентный спуск с фиксированным шагом}
+\begin{center}
+    \includegraphics[scale=0.35]{sixth_example_standard_3d.png}
+    \includegraphics[scale=0.30]{sixth_example_standard_2d.png}
+    \captionof{figure}{Градиентный спуск с фиксированным шагом, $(x_0, y_0) = (0, 0)$}
+    \label{fig:enter-label}
+\end{center}
+\begin{center}
+    \includegraphics[scale=0.35]{sixth_example_standard2_3d.png}
+    \includegraphics[scale=0.30]{sixth_example_standard2_2d.png}
+    \captionof{figure}{Градиентный спуск с фиксированным шагом, $(x_0, y_0) = (0, -4)$}
+    \label{fig:enter-label}
+\end{center}
+\subsubsection*{Градиентный шаг на основе дихотомии/золотого сечения}
+\begin{center}
+    \includegraphics[scale=0.35]{sixth_example_dichotomy_3d.png}
+    \includegraphics[scale=0.30]{sixth_example_dichotomy_2d.png}
+    \captionof{figure}{Градиентный спуск на основе метода дихотомии/золотого сечения, $(x_0, y_0) = (0, 0)$}
+    \label{fig:enter-label}
+\end{center}
+\begin{center}
+    \includegraphics[scale=0.35]{sixth_example_dichotomy2_3d.png}
+    \includegraphics[scale=0.30]{sixth_example_dichotomy2_2d.png}
+    \captionof{figure}{Градиентный спуск на основе метода дихотомии/золотого сечения, $(x_0, y_0) = (0, -4)$}
+    \label{fig:enter-label}
+\end{center}
+\subsubsection*{Метод Нелдера-Мида}
+\begin{center}
+    \includegraphics[scale=0.35]{sixth_example_nelder_mead_3d.png}
+    \includegraphics[scale=0.30]{sixth_example_nelder_mead_2d.png}
+    \captionof{figure}{Метод Нелдера-Мида, $(x_0, y_0) = (0, 0)$}
+    \label{fig:enter-label}
+\end{center}
+\begin{center}
+    \includegraphics[scale=0.35]{sixth_example_nelder_mead2_3d.png}
+    \includegraphics[scale=0.30]{sixth_example_nelder_mead2_2d.png}
+    \captionof{figure}{Метод Нелдера-Мида, $(x_0, y_0) = (0, -4)$}
+    \label{fig:enter-label}
+\end{center}
+\subsubsection*{Полученные результаты:}
+Проблема мультимодальных функций для градиентного спуска является наличие локальных минимумов, в которых он может остановится, не дойдя до глобального. Однако в примере показана функция с несколькими глобальными минимумами, которые расположены рядом друг с другом. Для градиентного спуска это не является проблемой, так как он движется в конкретном направлении к одному из оптимумов, благодаря производным по направлению. Однако для метода Нелдера-Мида это вызывает трудности, так как симплексы могут попадать в окрестности разных минимумов. 
+\end{document}

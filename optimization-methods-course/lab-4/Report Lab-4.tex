@@ -1,0 +1,417 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T2A]{fontenc}
+\usepackage[russian]{babel}
+\usepackage{amsfonts}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{arcs}
+\usepackage{fancyhdr}
+\usepackage{float}
+\usepackage[left=3cm,right=3cm,top=3cm,bottom=3cm]{geometry}
+\usepackage{graphicx}
+\usepackage{setspace}
+\DeclareGraphicsExtensions{.png, .jpeg}
+\graphicspath{{images/}}
+\usepackage{hyperref}
+\usepackage{multicol}
+\usepackage{stackrel}
+\usepackage{xcolor}
+\usepackage{minted}
+\usepackage{caption}
+\usepackage{amsmath}
+\usepackage{hyperref}
+\usepackage{mathtools}
+\DeclarePairedDelimiter\floor{\lfloor}{\rfloor}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,      
+    urlcolor=cyan,
+    pdftitle={Overleaf Example},
+    pdfpagemode=FullScreen,
+}
+
+\begin{document}
+\begin{titlepage}
+    \bfseries 
+        {\centering
+            \vspace*{14em}
+            \Huge Методы оптимизации\par
+            \bigbreak
+            Отчёт по лабораторной работе №4 \par
+        }
+    \vspace{20em}
+    \begin{spacing}{2}
+        \begin{flushright}
+            {\Large \textbf{Выполнили:}}  \\
+            {\large Евсеева Арина M3234} \\
+            {\large Шульпин Егор M3232} \\
+            {\large Гаврилюк Виталий M3232} \\ 
+        \end{flushright}
+    \end{spacing}
+\end{titlepage}
+
+\newpage
+\section*{Постановка задачи}
+\subsection*{1. Теоретическое описание алгоритма пчелиной колонии и его реализация;}
+\subsection*{2. Сравнение алгоритма пчелиной колонии с методами из предыдущих лабораторных работ:}
+\begin{itemize}
+    \item \textbf{Мультимодальная функция;}
+    \item \textbf{Функция плоского вида;}
+    \item \textbf{Функция типа Розенброка;}
+\end{itemize}
+\subsection*{3. Применение библиотечной реализации (optuna) к примерам предыдущих лабораторных;}
+\subsection*{4. Использование библиотечных методов (optuna) для нахождения оптимальных hyperпараметров.}
+\subsection*{\href{https://gitfront.io/r/Vitaliy-X-0/TLNs9s2iAaGd/MetOpt/}{Итоговая реализация}}
+
+\newpage
+\section*{Алгоритм пчелиной колонии}
+\subsection*{Описание}
+
+Алгоритм роя пчел (Artificial Bee Colony Algorithm или Bees Algorithm) разработан в 2005 году. Метод основан на симуляции поведения пчел при поиске нектара.  Рой пчел отправляет несколько разведчиков в случайных направлениях для поиска нектара.  Вернувшись,  разведчики сообщают о найденных на поле участках с цветами,  содержащими нектар,  и на них вылетают остальные пчелы. При этом чем больше на участке нектара, тем больше пчел к нему устремляется.  Однако при этом пчелы могут случайным образом отклоняться от выбранного направления. После возвращения всех пчел в улей вновь происходит обмен информацией и отправка пчел-разведчиков и пчел-рабочих.  Фактически разведчики действуют по алгоритму случайного поиска. \\
+
+\noindent А теперь представьте, что местоположение глобального экстремума - это участок, где больше всего нектара, и этот участок единственный, то есть в других местах нектар есть, но меньше. Причем пчелы живут не на плоскости, где достаточно знать две координаты, чтобы определить расположение участков, а в многомерном пространстве, где каждая координата представляет собой один параметр функции, которую нужно оптимизировать. Количество найденного нектара - это значение целевой функции в данной точке.
+
+\subsection*{Начальные параметры}
+
+\begin{itemize}
+    \item $num\_bees$: Этот параметр указывает количество пчёл в вашем алгоритме. Вероятно, чем больше пчёл, тем более разнообразными будут исследуемые решения.
+    \item $num\_elite$: Количество элитных пчел.
+    \item $num\_best\_sites$: Количество лучших участков, которые будут исследоваться элитными пчелами.
+    \item $neighborhood\_size$: Размер окрестности вокруг лучших решений, в которой будут искаться новые решения. 
+    \item $iterations$: Количество последовательных вылетов пчел на поиски.
+\end{itemize}
+
+\subsection*{Основной процесс}
+\begin{enumerate}
+    \item \textbf{Инициализация пчел}: Пчелы размещаются случайным образом по заданным значениям $low$ и $high$, то есть минимальным и максимальным значениям координат в пространстве решений, и оцениваются по значению целевой функции. 
+    \item \textbf{Основной цикл}: Повторяется до выполнения критерия остановки.
+    \begin{enumerate}
+        \item Вычисляется значение целевой функции $f$ для каждой пчелы.
+        \item  Пчелы сортируются по значению целевой функции (чем меньше значение, тем лучше решение).
+        \item \textbf{Разведка новых решений случайным образом}: Пчелы, не входящие в число элитных, заменяются новыми случайными решениями.
+        \item \textbf{Эксплуатация лучших решений}: Для каждой элитной пчелы генерируются новые решения в окрестности текущего решения. Если новое решение лучше текущего (значение целевой функции меньше), то элитная пчела перемещается в новую позицию.
+    \end{enumerate}
+\end{enumerate}
+
+\newpage
+\section*{Сравнение эффективности разных методов}
+\subsection*{Выбранные методы}
+Для сравнения были выбраны данные методы:
+\begin{itemize}
+    \item Градиентный спуск с золотым сечением;
+    \item Метод Нелдера-Мида;
+    \item Метод Ньютона с дихотомией;
+    \item Алгоритм пчелиной колонии.
+\end{itemize}
+
+\subsection*{Функция Химмельблау}
+Функция Химмельблау $f = (x^2 + y - 11)^2 + (x + y^2 - 7)^2$ имеет 4 локальных минимума:
+\begin{itemize}
+    \item $f(3, 2) = 0$;
+    \item $f(-2,805118..., 3,131312...) = 0$;
+    \item $f(-3,779310..., -3,283186...) = 0$;
+    \item $f(3,584428..., -1,848126...) = 0$.
+\end{itemize}
+\subsubsection*{Метод градиентного спуска с золотым сечением}
+\textbf{Начальные параметры:}
+\begin{itemize}
+    \item $\mathcal{E} = 10^{-5}$;
+    \item Начальные координаты: $x_0 = (-4, 0)$;
+    \item Границы золотого сечения: $l = \mathcal{E}, r = 50$.
+\end{itemize}
+\begin{center}
+    \includegraphics[scale=0.35]{img/first_example_gradient_descent_3d.png}
+    \includegraphics[scale=0.30]{img/first_example_gradient_descent_2d.png}
+    \captionof{figure}{$f(3,58437, -1,84809) = 0$}
+    \label{fig:enter-label}
+\end{center}
+\subsubsection*{Метод Нелдера-Мида}
+\textbf{Начальные параметры:}
+\begin{itemize}
+    \item $\mathcal{E} = 10^{-5}$;
+    \item Начальные параметры: $x_0 = (-4, 0)$.
+\end{itemize}
+\begin{center}
+    \includegraphics[scale=0.35]{img/first_example_nelder_mead_3d.png}
+    \includegraphics[scale=0.30]{img/first_example_nelder_mead_2d.png}
+    \captionof{figure}{$f(-2,8051, 3,1313) = 0$} 
+    \label{fig:enter-label}
+\end{center}
+\subsubsection*{Метод Ньютона с дихотомией}
+\textbf{Начальные параметры:}
+\begin{itemize}
+    \item $\mathcal{E} = 10^{-5}$;
+    \item Начальные координаты: $x_0 = (-4, 0)$;
+    \item Границы дихотомии: $l = \mathcal{E}, r = 30$.
+\end{itemize}
+\begin{center}
+    \includegraphics[scale=0.35]{img/first_example_newton_3d.png}
+    \includegraphics[scale=0.30]{img/first_example_newton_2d.png}
+    \captionof{figure}{$f(3, 2) = 0$} 
+    \label{fig:enter-label}
+\end{center}
+\newpage
+\subsubsection*{Метод пчелиной колонии}
+\textbf{Начальные параметры:}
+\begin{itemize}
+    \item Количество пчел: $num\_bees = 5$;
+    \item Количество элитных пчел: $num\_elite = 3$;
+    \item Количество лучших участков: $num\_best\_sites = 10$;
+    \item Размер окрестности: $neighborhood\_size = 0.1$;
+    \item Количество вылетов: $iterations = 10$;
+    \item Границы координат: $low = -5, high = 5$.
+\end{itemize}
+\begin{center}
+    \includegraphics[scale=0.35]{img/first_example_bees_3d.png}
+    \includegraphics[scale=0.30]{img/first_example_bees_2d.png}
+    \captionof{figure}{$f(3,5926, -1.8557) = 0,0039$} 
+    \label{fig:enter-label}
+\end{center}
+\subsubsection*{Полученные результаты}
+\includegraphics[scale=0.35]{img/first_example_result.jpeg}
+
+\subsection*{Функция Изома}
+Функция Изома $f = -\cos{x} \cdot \cos{y} \cdot \exp{(-((x - \pi)^2 + (y - \pi)^2))}$ имеет глобальный минимум в точке $f(\pi, \pi) = -1$.
+\subsubsection*{Метод градиентного спуска с золотым сечением}
+\textbf{Начальные параметры:}
+\begin{itemize}
+    \item $\mathcal{E} = 10^{-5}$;
+    \item Начальные координаты: $x_0 = (1,61, 1,61)$ - максимально удаленное значение, при котором верно находится минимум;
+    \item Границы золотого сечения: $l = \mathcal{E}, r = 50$.
+\end{itemize}
+\begin{center}
+    \includegraphics[scale=0.35]{img/second_example_gradient_descent_3d.png}
+    \includegraphics[scale=0.30]{img/second_example_gradient_descent_2d.png}
+    \captionof{figure}{$f(3,1415, 3,1415) = -1$} 
+    \label{fig:enter-label}
+\end{center}
+\subsubsection*{Метод Нелдера-Мида}
+\textbf{Начальные параметры:}
+\begin{itemize}
+    \item $\mathcal{E} = 10^{-5}$;
+    \item Начальные координаты: $x_0 = (1,56, 1,56)$ - максимально удаленное значение, при котором верно находится минимум.
+\end{itemize}
+\begin{center}
+    \includegraphics[scale=0.35]{img/second_example_nelder_mead_3d.png}
+    \includegraphics[scale=0.30]{img/second_example_nelder_mead_2d.png}
+    \captionof{figure}{$f(3,1415, 3,1415) = -0,9999$} 
+    \label{fig:enter-label}
+\end{center}
+\subsubsection*{Метод Ньютона с дихотомией}
+\textbf{Начальные параметры:}
+\begin{itemize}
+    \item $\mathcal{E} = 10^{-5}$;
+    \item Начальные координаты: $x_0 = (2,14, 2,14)$;
+    \item Границы дихотомии: $l = \mathcal{E}, r = 30$.
+\end{itemize}
+\begin{center}
+    \includegraphics[scale=0.35]{img/second_example_newton_3d.png}
+    \includegraphics[scale=0.30]{img/second_example_newton_2d.png}
+    \captionof{figure}{$f(1,3049, 1,3049) = 0$}
+    \label{fig:enter-label}
+\end{center}
+\subsubsection*{Метод пчелиной колонии}
+\textbf{Начальные параметры:}
+\begin{itemize}
+    \item Количество пчел: $num\_bees = 10$;
+    \item Количество элитных пчел: $num\_elite = 3$;
+    \item Количество лучших участков: $num\_best\_sites = 10$;
+    \item Размер окрестности: $neighborhood\_size = 0.1$;
+    \item Количество вылетов: $iterations = 5$;
+    \item Границы координат: $low = 0, high = 2\pi$.
+\end{itemize}
+\begin{center}
+    \includegraphics[scale=0.35]{img/second_example_bees_3d.png}
+    \includegraphics[scale=0.30]{img/second_example_bees_2d.png}
+    \captionof{figure}{$f(3,1548, 3,1382) = -0,9997$}
+    \label{fig:enter-label}
+\end{center}
+\subsubsection*{Полученные результаты}
+\includegraphics[scale=0.35]{img/second_example_result.jpeg}
+
+\subsection*{Функция Розенброка}
+Каноническое представление функция Розенброка $f = (1 - x)^2 + 100(y - x^2)^2$ имеет глобальный минимум $f(1, 1) = 0$.
+\subsubsection*{Метод градиентного спуска с золотым сечением}
+\textbf{Начальные параметры:}
+\begin{itemize}
+    \item $\mathcal{E} = 10^{-5}$;
+    \item Начальные координаты: $x_0 = (-2, 3)$;
+    \item Границы золотого сечения: $l = \mathcal{E}, r = 50$.
+\end{itemize}
+\begin{center}
+    \includegraphics[scale=0.35]{img/third_example_gradient_descent_3d.png}
+    \includegraphics[scale=0.30]{img/third_example_gradient_descent_2d.png}
+    \captionof{figure}{$f(0,9457, 0,8942) = 0,0029$}
+    \label{fig:enter-label}
+\end{center}
+\subsubsection*{Метод Нелдера-Мида}
+\textbf{Начальные параметры:}
+\begin{itemize}
+    \item $\mathcal{E} = 10^{-5}$;
+    \item Начальные координаты: $x_0 = (-2, 3)$.
+\end{itemize}
+\begin{center}
+    \includegraphics[scale=0.35]{img/third_example_nelder_mead_3d.png}
+    \includegraphics[scale=0.30]{img/third_example_nelder_mead_2d.png}
+    \captionof{figure}{$f(1, 1) = 0$}
+    \label{fig:enter-label}
+\end{center}
+\subsubsection*{Метод Ньютона с дихотомией}
+\textbf{Начальные параметры:}
+\begin{itemize}
+    \item $\mathcal{E} = 10^{-5}$;
+    \item Начальные координаты: $x_0 = (1, 1) = 0$
+\end{itemize}
+\begin{center}
+    \includegraphics[scale=0.35]{img/third_example_newton_3d.png}
+    \includegraphics[scale=0.30]{img/third_example_newton_2d.png}
+    \captionof{figure}{$f(1, 1) = 0$}
+    \label{fig:enter-label}
+\end{center}
+\subsubsection*{Метод пчелиной колонии}
+\textbf{Начальные параметры:}
+\begin{itemize}
+    \item Количество пчел: $num\_bees = 15$;
+    \item Количество элитных пчел: $num\_elite = 5$;
+    \item Количество лучших участков: $num\_best\_sites = 10$;
+    \item Размер окрестности: $neighborhood\_size = 0.25$;
+    \item Количество вылетов: $iterations = 50$;
+    \item Границы координат: $low = -5, high = 5$.
+\end{itemize}
+\begin{center}
+    \includegraphics[scale=0.35]{img/third_example_bees_3d.png}
+    \includegraphics[scale=0.30]{img/third_example_bees_2d.png}
+    \captionof{figure}{$f(1,0201, 1,0441) = 0,0016$}
+    \label{fig:enter-label}
+\end{center}
+\subsubsection*{Полученные результаты}
+\includegraphics[scale=0.35]{img/third_example_result.jpeg}
+
+\subsection*{Вывод}
+Метод пчелиного роя способен с большой вероятностью найти локальный экстремум функции, имеющей один минимум на заданной области поиска. В слаучае функции с большим количеством экстремумов результат сильно зависит от начальных парамаметров: количества пчел и итераций, размера области локального поиска, начального рандомного распределния пчел. Решением данной проблемы стало увелечение начальных парамаметров или последовательный запуск кода несколько раз, что во всех случаях помогало найти минимум. Также при рассмотрении функции Изома, которая явлвяется функцией плоского вида, методу пчелиного роя в $10\%$ случаев не удавлось найти минимум из-за неудачно подобранных начальных параметров. Из-за наличия рандомных значений результаты алгоритма могут варьироваться между запусками, что требует многократного запуска для повышения надежности результатов. Плюсом явлвяется и то, что данный алгоритм не требует вычисления производных.
+
+\newpage
+\section*{Применение optuna к примерам предыдущих лабораторных}
+Optuna - это библиотека для автоматизации гиперпараметрического поиска и их оптимизации. В основном, ее используют уже с готовыми метода оптимизации. Однако данную библиотеку можно использовать и для поиска оптимумов функции.
+\subsection*{Сравнение}
+Для сравнения работоспособности и эффективности реализации с помощью optuna возьмем те же функции, что были рассмотрены в предыдущем пункте. Отметим начальные параметры нашей реализации:
+\begin{itemize}
+    \item Границы координат: $l$ и $r$;
+    \item Количество испытаний: $n\_trials$;
+    \item Алгоритм оптимизации hyperпараметров: Алгоритм TPE (Tree-structured Parzen Estimator).
+\end{itemize}
+\subsubsection*{Функция Химмельблау}
+\textbf{Начальные параметры:}
+\begin{itemize}
+    \item $l = -6, r = 6$ и $l = -5, r = 5$;
+    \item Количество испытаний: $n\_trials = 50$ и $n\_trials = 250$.
+\end{itemize}
+\begin{center}
+    \includegraphics[scale=0.35]{img/fourth_example_himmelblau_3d.png}
+    \includegraphics[scale=0.30]{img/fourth_example_himmelblau_2d.png}
+    \captionof{figure}{$f(2,8424, 2,0652) = 0.7428$}
+    \label{fig:enter-label}
+\end{center}
+\begin{center}
+    \includegraphics[scale=0.35]{img/fourth_example_himmelblau2_3d.png}
+    \includegraphics[scale=0.30]{img/fourth_example_himmelblau2_2d.png}
+    \captionof{figure}{$f(3,003, 2) = 0,0003$}
+    \label{fig:enter-label}
+\end{center}
+\subsubsection*{Функция Изома}
+\textbf{Начальные параметры:}
+\begin{itemize}
+    \item $l = 0, r = 2\pi$ и $l = 0, r = 5$;
+    \item Количество испытаний: $n\_trials = 50$ и $n\_trials = 250$.
+\end{itemize}
+\begin{center}
+    \includegraphics[scale=0.35]{img/fourth_example_isome_3d.png}
+    \includegraphics[scale=0.30]{img/fourth_example_isome_2d.png}
+    \captionof{figure}{$f(3,416, 2,9083) = -0,8225$}
+    \label{fig:enter-label}
+\end{center}
+\begin{center}
+    \includegraphics[scale=0.35]{img/fourth_example_isome2_3d.png}
+    \includegraphics[scale=0.30]{img/fourth_example_isome2_2d.png}
+    \captionof{figure}{$f(3,1224, 3,1456) = -0,9994$}
+    \label{fig:enter-label}
+\end{center}
+\subsubsection*{Функция Розенброка}
+\textbf{Начальные параметры:}
+\begin{itemize}
+    \item $l = -4, r = 4$;
+    \item Количество испытаний: $n\_trials = 50$ и $n\_trials = 250$.
+\end{itemize}
+\begin{center}
+    \includegraphics[scale=0.35]{img/fourth_example_rosenbrock_3d.png}
+    \includegraphics[scale=0.30]{img/fourth_example_rosenbrock_2d.png}
+    \captionof{figure}{$f(0,4284, 0,2219) = 0,4738$}
+    \label{fig:enter-label}
+\end{center}
+\begin{center}
+    \includegraphics[scale=0.35]{img/fourth_example_rosenbrock2_3d.png}
+    \includegraphics[scale=0.30]{img/fourth_example_rosenbrock2_2d.png}
+    \captionof{figure}{$f(0,7996, 0,6388) = 0,0401$}
+    \label{fig:enter-label}
+\end{center}
+\subsection*{Вывод}
+Исходя из полученных результатов, можно сделать вывод, что реализация с помощью библиотеки optuna практически всегда находит верный минимум, но зачастую требуется большое количество итераций. Например, при количестве итераций меньше 250 метода часто не сходился к нужному оптимуму. Также стоит отметить, что на работоспособность сильно влияют значения начальных точек: при большем расстоянии от точки экстремума требовалось большее количество вычислений.
+
+\section*{Применение optuna к hyperпараметрам предыдущих лабораторных}
+\subsection*{Основные компоненты Optuna}
+
+\subsubsection*{study:}
+\begin{itemize}
+    \item \textbf{Описание}: центральный объект в Optuna, который управляет процессом оптимизации.
+    \item \textbf{Основные параметры}:
+    \begin{itemize}
+        \item \texttt{study\_name} (str): имя исследования. Может быть полезно для идентификации исследования.
+        \item \texttt{direction} (str): направление оптимизации ('minimize' или 'maximize'). Указывает, нужно ли минимизировать или максимизировать целевую функцию.
+        \item \texttt{storage} (str или \texttt{optuna.storages.BaseStorage}): место для хранения истории исследований. Может быть локальная база данных или URL к удаленной базе данных.
+    \end{itemize}
+\end{itemize}
+
+\subsubsection*{trial:}
+\begin{itemize}
+    \item \textbf{Описание}: объект, представляющий одно испытание (evaluation) в процессе оптимизации.
+    \item \textbf{Основные параметры}:
+    \begin{itemize}
+        \item \texttt{suggest\_float(name, low, high)} (метод): предлагает значение для непрерывного гиперпараметра.
+        \item \texttt{suggest\_int(name, low, high)} (метод): предлагает значение для целочисленного гиперпараметра.
+        \item \texttt{suggest\_categorical(name, choices)} (метод): предлагает значение для категориального гиперпараметра.
+    \end{itemize}
+\end{itemize}
+
+\subsection*{Функция потерь}
+Функция потерь (loss function) — это математическая функция, которая измеряет, насколько хорошо модель машинного обучения предсказывает целевые значения. Она оценивает разницу между предсказанными моделью значениями и фактическими значениями. Целью является минимизация значения функции потерь, что означает улучшение точности предсказаний модели. Мы исполюзуем MSE (Mean Squared Error): средняя квадратичная ошибка, от 0 до бесконечности. Значение 0 означает, что модель предсказывает точные значения без ошибки.
+
+\subsection*{Результаты исследования}
+В результате моего исследования были получены следующие оптимальные значения гиперпараметров и соответствующие значения функции потерь:
+
+\begin{itemize}
+    \item \textbf{SGD}:
+    \begin{itemize}
+        \item \textbf{Best parameters}: 
+        \begin{itemize}
+            \item \texttt{'learning\_rate': 0.036957644796091156}
+            \item \texttt{'eps': 1.2658880982575924e-05}
+        \end{itemize}
+        \item \textbf{Best loss}: 0.9703574489061714
+    \end{itemize}
+    \item \textbf{Newton}:
+    \begin{itemize}
+        \item \textbf{Best parameters}:
+        \begin{itemize}
+            \item \texttt{'eps': 1.0677599746102762e-08}
+        \end{itemize}
+        \item \textbf{Best loss}: 0.9680457060081309
+    \end{itemize}
+\end{itemize}
+
+\noindent Данные результаты практически совпали с используемыми нами ранее значениями в предыдущих лабораторных работах: \texttt{'eps'}$=1e-7$ для метода Ньютона и \texttt{'eps'}$=1e-5$ для стохастического градиентного спуска.
+\subsection*{Вывод}
+Из полученных результатов можно сделать вывод, что данная 
+библиотека больше подходит для оптимизации начальных параметров, нежели для полноценного решения задачи поиска экстремума. В предыдущих лабораторных работах нам приходилось запускать реализованные методы большое количество раз для нахождения оптимальных hyperпараметров. Данную проблему решает optuna: из проведенного исследования можно выделить, что найденные параметры схоже, и даже лучше, чем найденные нами ранее.
+\end{document}

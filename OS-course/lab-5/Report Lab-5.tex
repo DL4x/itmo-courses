@@ -1,0 +1,129 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T2A]{fontenc}
+\usepackage[russian]{babel}
+\usepackage{amsfonts}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{arcs}
+\usepackage{fancyhdr}
+\usepackage{float}
+\usepackage[left=3cm,right=3cm,top=3cm,bottom=3cm]{geometry}
+\usepackage{graphicx}
+\DeclareGraphicsExtensions{.png}
+\usepackage{hyperref}
+\usepackage{multicol}
+\usepackage{stackrel}
+\usepackage{xcolor}
+\usepackage{minted}
+
+\begin{document}
+\title{Отчет по лабораторной работе 5}
+\date{}
+\maketitle
+
+\subsubsection*{Данные о текущей конфигурации операционной системы в аспекте управления памятью:}
+\begin{itemize}
+    \item Общий объем оперативной памяти: 4005120 kB;
+    \item Объем раздела подкачки: 4004860 kB;
+    \item Размер страницы виртуальной памяти: 4 kB;
+    \item Объем свободной физической памяти в ненагруженной системе: 2563716 kB;
+    \item Объем свободного пространства в разделе подкачки в ненагруженной системе: 4004860 kB.
+\end{itemize}
+
+\bigskip
+
+\subsection*{Эксперимент №1}
+
+\subsubsection*{Первый этап}
+Запуск \textbf{mem.sh} привел к аварийной остановке процесса. \\
+Последняя запись в журнале, полученная с помощью \textbf{dmesg | grep "mem.sh"}:
+\begin{minted}[mathescape,
+    linenos,
+    numbersep=5pt,
+    gobble=2,
+    frame=lines,
+    framesep=2mm]{csharp}
+    [15822.955087] oom-kill:constraint=CONSTRAINT_NONE,nodemask=(null),cpuset=user
+    .slice,mems_allowed=0,global_oom,task_memcg=/user.slice/user-1000.slice/user@1000
+    .service/app.slice/app-org.gnome.Terminal.slice/vte-spawn-c8a7aabf-6f63-4cf2-8cbe-
+    3b68d4e29e69.scope,task=mem.sh,pid=24811,uid=1000
+    [15822.955096] Out of memory: Killed process 24811 (mem.sh) total-vm:6995356kB, 
+    anon-rss:3545648kB, file-rss:1680kB, shmem-rss:0kB, UID:1000 pgtables:13720kB 
+    oom_score_adj:0
+\end{minted}
+Значение в последней строке \textbf{report.log}: 89000000. \\
+Во время работы \textbf{mem.sh} необходимые данные утилиты \textbf{top} фиксировались с помощью скрипта \textbf{monitor1.sh} в файл \textbf{.mem\_data} ежесекундно. \\
+Результаты наблюдений за оперативной памятью зафиксированы на Рис.1. На протяжении всей работы \textbf{mem.sh} скрипт находился на первом месте утилиты \textbf{top} по потреблению  памяти.
+
+\subsubsection*{Второй этап}
+Запуск \textbf{mem.sh} и \textbf{mem2.sh} сначала привел к аварийной остановке процесса \textbf{mem.sh}, а затем и к аварийной остановке процесса \textbf{mem2.sh}. \\
+Последняя запись в журнале, полученная с помощью \textbf{dmesg | grep "mem[2]*.sh"}:
+\begin{minted}[mathescape,
+    linenos,
+    numbersep=5pt,
+    gobble=2,
+    frame=lines,
+    framesep=2mm]{csharp}
+    [25655.869335] oom-kill:constraint=CONSTRAINT_NONE,nodemask=(null),cpuset=user
+    .slice,mems_allowed=0,global_oom,task_memcg=/user.slice/user-1000.slice/user@1000
+    .service/app.slice/app-org.gnome.Terminal.slice/vte-spawn-7d0bf107-3c62-4fd9-bd1c-
+    9909f9ab40af.scope,task=mem.sh,pid=27327,uid=1000
+    [25655.869345] Out of memory: Killed process 27327 (mem.sh) total-vm:3501316kB, 
+    anon-rss:1780200kB, file-rss:1616kB, shmem-rss:0kB, UID:1000 pgtables:6888kB 
+    oom_score_adj:0
+    [25701.110312] [ 27328] 1000 27328 1750060 898948 14061568 849931 0 mem2.sh
+    [25701.110316] oom-kill:constraint=CONSTRAINT_NONE,nodemask=(null),cpuset=user
+    .slice,mems_allowed=0,global_oom,task_memcg=/user.slice/user-1000.slice/user@1000
+    .service/app.slice/app-org.gnome.Terminal.slice/vte-spawn-7d0bf107-3c62-4fd9-bd1c-
+    9909f9ab40af.scope,task=mem2.sh,pid=27328,uid=1000
+    [25701.110327] Out of memory: Killed process 27328 (mem2.sh) total-vm:7000240kB, 
+    anon-rss:3593960kB, file-rss:1832kB, shmem-rss:0kB, UID:1000 pgtables:13732kB 
+    oom_score_adj:0
+\end{minted}
+Значение в последней строке \textbf{report.log}: 44000000. \\
+Значение в последней строке \textbf{report2.log}: 89000000. \\
+Во время работы \textbf{mem.sh} и \textbf{mem2.sh} необходимые данные утилиты \textbf{top} фиксировались с помощью скрипта \textbf{monitor2.sh} в файл \textbf{.mem2\_data} ежесекундно. \\
+Результаты наблюдений за оперативной памятью зафиксированы на Рис.2. До аварийной остановки \textbf{mem.sh} скрипты делили первое место утилиты \textbf{top} по потреблению памяти. Потом \textbf{mem2.sh} занимал первое место до самого конца.
+
+
+\subsubsection*{Вывод}
+\begin{enumerate}
+    \item Из первого этапа видно, что при полном заполнении физической памяти (отмечена синим на Рис.1) начинается использование раздела подкачки, то есть происходит страничный обмен и его заполнение. При полном заполнении файла подкачки произошла аварийная остановка процесса. 
+    \item Из второго этапа видно, что оба скрипта аналогично заполнили всю физическую память и файл подкачки. Для продолжения работы хотя бы одного процесса был аварийно остановлен \textbf{mem.sh}. Поэтому в середине графика можно заметить, как резко освободилась вся память, затраченная \textbf{mem.sh}. Затем \textbf{mem2.sh} заполнил всю освобожденную физическую память и файл подкачки, а потом аварийно завершился. 
+\end{enumerate}
+
+
+\bigskip
+
+\subsection*{Эксперимент №2}
+
+\subsubsection*{Основной этап и вывод}
+Запуск \textbf{newmem.sh} с аргументом $N = 8900000$ и $K = 10$ завершился успешно. После выполнения \textbf{dmesg | grep "newmem.sh"} ничего не было выведено. Это можно объяснить тем, что в худшем случае общий размер всех массивов был равен $\frac{N_{total}}{K} \cdot K = N_{total} = 89000000$. 
+
+\medskip
+
+\noindent Запуск \textbf{newmem.sh} с аргументом $N = 8900000$ и $K = 30$ завершился аварийно. После выполнения \textbf{dmesg | grep "newmem.sh"} вывелось 15 аварийных сообщениий. Очевидно, что даже в лучшем случае общий размер всех массивов будет больше, чем $N_{total} = 89000000$.
+
+\medskip
+
+\noindent Подобрать приближенное максимальное значение $N$ при $K = 30$ без аварийной остановки можно с помощью бинарного поиска. Сделаем левой границей $l = \frac{N_{total}}{K} = 2966666$, а правой границей $r = N = 8900000$. После выполнений нескольких итераций приходим к примерному максимальному значению $N = 5400000$, при котором выполение \textbf{dmesg | grep "newmem.sh"} ничего не выводит. Стоит уточнить, что итерации выполнялись вручную, так как для завершения всех процессов необходимо некоторое время.
+
+
+
+
+\begin{figure}
+    \centering
+    \includegraphics[scale=0.7]{1.png}
+    \caption{Свободная оперативная память при запущенном процессе \textbf{mem.sh}}
+    \label{fig:enter-label}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \includegraphics[scale=0.7]{2.png}
+    \caption{Свободная оперативная память при запущенных процессах \textbf{mem.sh} и \textbf{mem2.sh}}
+    \label{fig:enter-label}
+\end{figure}
+
+\end{document}
