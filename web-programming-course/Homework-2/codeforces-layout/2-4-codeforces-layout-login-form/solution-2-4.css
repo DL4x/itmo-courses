@@ -1,0 +1,91 @@
+main div.login-form-box {
+    position: relative;
+    width: 485px;
+    height: 300px;
+    margin-left: 230px;
+}
+
+main div.login-form-box div.header {
+    color: #3B5998;
+    font-weight: bold;
+    line-height: 25px;
+    border: 1px solid;
+    padding-left: 10px;
+    border-top-left-radius: var(--border-radius);
+    border-top-right-radius: var(--border-radius);
+}
+
+main div.login-form-box div.body {
+    border-left: 1px solid;
+    border-right: 1px solid;
+}
+
+main div.login-form-box div.body div.field {
+    display: table-row;
+}
+
+main div.login-form-box div.body div.field div.name {
+    text-align: right;
+    padding-left: 50px;
+}
+
+main div.login-form-box div.body div.field div.value {
+    padding-left: 15px;
+}
+
+main div.login-form-box div.body div.field div.value input {
+    width: 250px;
+}
+
+main div.login-form-box div.body div.field div.error {
+    color: red;
+    font-size: 14px;
+    margin-left: 15px;
+}
+
+main div.login-form-box div.body div.field div.name, div.value {
+    display: table-cell;
+    padding-top: 25px;
+}
+
+main div.login-form-box div.body div.field div.value, div.error {
+    display: table;
+}
+
+main div.login-form-box div.body div.checkbox-field {
+    text-align: center;
+    margin-top: 20px;
+    margin-right: 2px;
+}
+
+main div.login-form-box div.body div.button-field {
+    text-align: center;
+    margin-top: 25px;
+    margin-right: 24px;
+}
+
+main div.login-form-box div.body div.button-field input {
+    width: 115px;
+    height: 30px;
+    font-size: 20px;
+}
+
+main div.login-form-box div.body form div.links {
+    margin-left: 324px;
+}
+
+main div.login-form-box div.body form div.links a {
+    font-size: 13px;
+}
+
+main div.login-form-box div.footer {
+    display: flex;
+    font-size: 13px;
+    border: 1px solid;
+    line-height: 20px;
+    flex-direction: row-reverse;
+}
+
+main div.login-form-box div.footer a {
+    margin-right: 10px;
+}

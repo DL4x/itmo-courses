@@ -1,0 +1,12 @@
+header nav form.search {
+    position: absolute;
+    top: 77px;
+    right: 10px;
+}
+
+header nav form input {
+    width: 175px;
+    padding-left: 21px;
+    border: 1px solid var(--border-color);
+    background: #f4f4f4 url("../img/search-16x16.png") 2px 2px no-repeat;
+}
