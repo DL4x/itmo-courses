@@ -1,0 +1,17 @@
+main .user {
+    height: 140px;
+    position: relative;
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+}
+
+main .user header {
+    margin: 5px;
+    font-size: 24px;
+    font-weight: normal;
+}
+
+main .user img {
+    float: right;
+    margin-top: -132px;
+}
