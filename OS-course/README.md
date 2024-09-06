@@ -1,7 +1,7 @@
 # OS-course
 
 ## Курс "Операционные системы Lite"
-##### *преподаватель: Маятин А.В.*
+## *Преподаватель: Маятин А.В.*
 
 - ### <a href="https://github.com/DL4x/itmo-courses/tree/main/OS-course/lab-1">Основы использования консольного интерфейса ОС Linux и интерпретатора bash</a>
 - ### <a href="https://github.com/DL4x/itmo-courses/tree/main/OS-course/lab-2">Мониторинг процессов и ресурсов в ОС Linux</a>
