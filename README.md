@@ -11,3 +11,4 @@
 - ### <a href="https://github.com/DL4x/itmo-courses/tree/main/java-course">Курс &laquo;Технологии программирования Java&raquo;</a>
 - ### <a href="https://github.com/DL4x/itmo-courses/tree/main/frontend-course">Курс &laquo;Фронтенд разработка&raquo;</a>
 - ### <a href="https://github.com/DL4x/itmo-courses/tree/main/parallel-programming-course">Курс &laquo;Параллельное программирование&raquo;</a>
+- ### <a href="https://github.com/DL4x/itmo-courses/tree/main/functional-programming-course">Курс &laquo;Функциональное программирование&raquo;</a>
