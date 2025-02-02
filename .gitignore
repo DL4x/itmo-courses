@@ -3,4 +3,5 @@
 *.idea
 *.gradle
 *.kotlin
+*.stack-work
 *.DS_Store
