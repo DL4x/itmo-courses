@@ -1,0 +1,34 @@
+type: edu
+files:
+  - name: src/Task.kt
+    visible: true
+    placeholders:
+      - offset: 43
+        length: 3
+        placeholder_text: /* var or val */
+        initial_state:
+          length: 16
+          offset: 43
+        initialized_from_dependency: false
+        encrypted_possible_answer: y6aWkJPC2xx4OnfGAsn2x5zTLvUVE60dmBqT1I8K8Dw=
+        selected: true
+        status: Solved
+      - offset: 144
+        length: 3
+        placeholder_text: /* var or val */
+        initial_state:
+          length: 16
+          offset: 157
+        initialized_from_dependency: false
+        encrypted_possible_answer: y6aWkJPC2xx4OnfGAsn2x5zTLvUVE60dmBqT1I8K8Dw=
+        selected: false
+        status: Solved
+    learner_created: false
+  - name: test/Tests.kt
+    visible: true
+    learner_created: false
+status: Solved
+feedback:
+  message: Congratulations!
+  time: "Fri, 27 Sep 2024 10:50:52 UTC"
+record: -1

@@ -1,0 +1,24 @@
+type: edu
+files:
+  - name: src/Task.kt
+    visible: true
+    placeholders:
+      - offset: 83
+        length: 39
+        placeholder_text: 0// and also code
+        initial_state:
+          length: 17
+          offset: 42
+        initialized_from_dependency: false
+        encrypted_possible_answer: n451hz7Ioafr7XeSSfH6LdJ2OMQOkNioSFzUutNL3Qo=
+        selected: false
+        status: Solved
+    learner_created: false
+  - name: test/Tests.kt
+    visible: true
+    learner_created: false
+status: Solved
+feedback:
+  message: Congratulations!
+  time: "Sat, 28 Sep 2024 12:15:33 UTC"
+record: -1

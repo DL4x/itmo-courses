@@ -1,0 +1,115 @@
+start: cnd1
+accept: ac
+reject: rj
+blank: _
+
+cnd1 _ -> cnd2 = ^
+cnd1 + -> cnd1 + >
+cnd1 0 -> cnd1 0 >
+cnd1 1 -> cnd1 1 >
+
+cnd2 = -> cnd2 = <
+cnd2 + -> cnd3 + <
+cnd2 @ -> cnd2 @ <
+cnd2 * -> cnd2 * <
+cnd2 $ -> cnd2 $ <
+cnd2 & -> cnd2 & <
+cnd2 0 -> cnd4 @ <
+cnd2 1 -> cnd5 @ <
+
+cnd3 _ -> cnd11 _ >
+cnd3 @ -> cnd3 @ <
+cnd3 0 -> cnd8 @ ^
+cnd3 1 -> cnd9 @ ^
+
+cnd4 + -> cnd6 + <
+cnd4 0 -> cnd4 0 <
+cnd4 1 -> cnd4 1 <
+
+cnd5 + -> cnd7 + <
+cnd5 0 -> cnd5 0 <
+cnd5 1 -> cnd5 1 <
+
+cnd6 _ -> cnd8 _ >
+cnd6 @ -> cnd6 @ <
+cnd6 0 -> cnd8 @ ^
+cnd6 1 -> cnd9 @ ^
+
+cnd7 _ -> cnd9 _ >
+cnd7 @ -> cnd7 @ <
+cnd7 0 -> cnd9 @ ^
+cnd7 1 -> cnd10 @ ^
+
+cnd8 _ -> cnd2 * <
+cnd8 + -> cnd8 + >
+cnd8 = -> cnd8 = >
+cnd8 @ -> cnd8 @ >
+cnd8 * -> cnd8 * >
+cnd8 $ -> cnd8 $ >
+cnd8 & -> cnd8 & >
+cnd8 0 -> cnd8 0 >
+cnd8 1 -> cnd8 1 >
+
+cnd9 _ -> cnd2 $ <
+cnd9 + -> cnd9 + >
+cnd9 = -> cnd9 = >
+cnd9 @ -> cnd9 @ >
+cnd9 * -> cnd9 * >
+cnd9 $ -> cnd9 $ >
+cnd9 & -> cnd9 & >
+cnd9 0 -> cnd9 0 >
+cnd9 1 -> cnd9 1 >
+
+cnd10 _ -> cnd2 & <
+cnd10 + -> cnd10 + >
+cnd10 = -> cnd10 = >
+cnd10 @ -> cnd10 @ >
+cnd10 * -> cnd10 * >
+cnd10 $ -> cnd10 $ >
+cnd10 0 -> cnd10 0 >
+cnd10 1 -> cnd10 1 >
+cnd10 & -> cnd10 & >
+
+cnd11 + -> cnd11 _ >
+cnd11 = -> cnd12 _ >
+cnd11 @ -> cnd11 _ >
+
+cnd12 _ -> cnd14 _ <
+cnd12 * -> cnd12 0 >
+cnd12 $ -> cnd12 1 >
+cnd12 & -> cnd13 0 >
+
+cnd13 _ -> cnd12 1 >
+cnd13 * -> cnd12 1 >
+cnd13 $ -> cnd13 0 >
+cnd13 & -> cnd13 1 >
+
+cnd14 _ -> cnd17 _ >
+cnd14 @ -> cnd14 @ <
+cnd14 * -> cnd14 * <
+cnd14 $ -> cnd14 $ <
+cnd14 0 -> cnd15 @ >
+cnd14 1 -> cnd16 @ >
+
+cnd15 _ -> cnd14 * <
+cnd15 @ -> cnd15 @ >
+cnd15 * -> cnd15 * >
+cnd15 $ -> cnd15 $ >
+cnd15 0 -> cnd15 0 >
+cnd15 1 -> cnd15 1 >
+
+cnd16 _ -> cnd14 $ <
+cnd16 @ -> cnd16 @ >
+cnd16 * -> cnd16 * >
+cnd16 $ -> cnd16 $ >
+cnd16 0 -> cnd16 0 >
+cnd16 1 -> cnd16 1 >
+
+cnd17 _ -> cnd18 _ <
+cnd17 @ -> cnd17 _ >
+cnd17 * -> cnd17 0 >
+cnd17 $ -> cnd17 1 >
+
+cnd18 _ -> ac _ >
+cnd18 0 -> cnd18 0 <
+cnd18 1 -> cnd18 1 <

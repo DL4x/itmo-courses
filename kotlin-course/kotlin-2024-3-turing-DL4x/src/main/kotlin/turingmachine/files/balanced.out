@@ -1,0 +1,20 @@
+start: cnd1
+accept: ac
+reject: rj
+blank: _
+
+cnd1 _ -> ac _ ^
+cnd1 ( -> cnd2 ( ^
+cnd1 ) -> rj _ ^
+
+cnd2 _ -> cnd4 _ <
+cnd2 $ -> cnd2 $ >
+cnd2 ( -> cnd2 ( >
+cnd2 ) -> cnd3 $ ^
+
+cnd3 $ -> cnd3 $ <
+cnd3 ( -> cnd2 $ ^
+cnd3 ) -> cnd3 ) <
+
+cnd4 _ -> ac _ ^
+cnd4 $ -> cnd4 _ <
