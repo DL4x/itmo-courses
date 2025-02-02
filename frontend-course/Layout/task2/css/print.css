@@ -1,0 +1,306 @@
+@import "config.css";
+
+.page-container
+{
+    @page
+    {
+        size: A4;
+    }
+    margin: 0 auto;
+    background: url("/img/background.jpeg") no-repeat;
+    background-size: cover;
+}
+
+.main-header
+{
+    width: 100%;
+    display: flex;
+}
+
+.title
+{
+    width: 100%;
+}
+
+.main-container
+{
+    padding: 10px;
+}
+
+fieldset
+{
+    padding: 0 10px;
+    margin: auto;
+    border: 2px solid black;
+
+    legend
+    {
+        font: 1em "Protest Guerrilla", sans-serif;
+    }
+}
+
+.jokes-container
+{
+    width: 24%;
+    float: left;
+}
+
+.jokes-header
+{
+    text-align: center;
+
+    h1
+    {
+        width: 150px;
+        margin: 10px auto;
+        line-height: 1em;
+        color: navajowhite;
+        background-color: black;
+        font-size: 2.5em;
+        text-shadow: 0.02em 0.02em darkgray,
+        0.04em 0.04em white;
+    }
+}
+
+.joke
+{
+    width: 95%;
+    margin: 0 auto;
+    font-size: 1.5em;
+
+    h1
+    {
+        font-size: 1.75em;
+        line-height: 0.9em;
+    }
+
+    p
+    {
+        line-height: 0.9em;
+        padding-bottom: 0.6em;
+        border-bottom: 2px solid black;
+
+        &::first-letter
+        {
+            color: red;
+            font-size: 2.5em;
+        }
+    }
+}
+
+.joke-1
+{
+    font: normal 700 0.7em "Acme", sans-serif;
+}
+
+.joke-2
+{
+    font: normal 700 0.7em "Chakra Petch", sans-serif;
+}
+
+.joke-3
+{
+    font: normal 700 0.7em "Berkshire Swash", serif;
+}
+
+.joke-4
+{
+    font: normal 700 0.7em "Yatra One", system-ui;
+}
+
+.joke-5
+{
+    font: normal 700 0.7em "Lobster Two", sans-serif;
+}
+
+.headline-container
+{
+    width: 74%;
+    float: right;
+    margin-left: auto;
+    margin-right: 0;
+    border-left: 2px solid black;
+}
+
+.headline-header
+{
+    width: 100%;
+    font-size: 4em;
+    font-weight: bold;
+    text-align: center;
+    font-family: 'Redgar', serif;
+
+    h1
+    {
+        width: 100%;
+        line-height: 0.8em;
+        margin-top: 1.5%;
+        margin-bottom: auto;
+        position: static;
+    }
+}
+
+.headline-body
+{
+    width: 100%;
+    font: 1.15em "Pirata One", system-ui;
+    line-height: 1.15em;
+}
+
+.normal-headline-text,
+.headline-decoration-wrapper
+{
+    margin-left: 2px;
+    margin-right: 2px;
+}
+
+.normal-headline-text
+{
+    margin-bottom: 2px;
+
+    &::first-letter
+    {
+        color: red;
+    }
+}
+
+.headline-decoration-wrapper
+{
+    width: 98%;
+    display: flex;
+    border-bottom: 2px solid black;
+}
+
+.headline-gif
+{
+    width: 60%;
+    height: 100%;
+    margin-left: 0;
+    margin-right: auto;
+}
+
+.rotated-headline-text
+{
+    width: 40%;
+    height: 19%;
+    writing-mode: vertical-rl;
+
+    &::first-letter
+    {
+        color: red;
+    }
+}
+
+.secondary-news
+{
+    width: 75%;
+    float: right;
+    display: flex;
+    margin-top: 4px;
+    height: max-content;
+    font: 0.78em "Spicy Rice", serif;
+
+    p
+    {
+        margin: 0 8px;
+
+        &::first-letter
+        {
+            color: red;
+            font-weight: 700;
+            font-size: 1.75em;
+            text-decoration: underline;
+        }
+    }
+}
+
+.nimbus-photo
+{
+    width: 35%;
+    height: 35%;
+    margin: auto 6px auto 0;
+}
+
+footer
+{
+    display: flex;
+    flex-direction: row;
+    bottom: 0;
+    height: 15%;
+    width: 100%;
+    justify-content: space-between;
+}
+
+.fine-words
+{
+    width: 40%;
+    height: 100%;
+    display: flex;
+
+    p
+    {
+        width: 40%;
+        text-align: center;
+        margin-left: auto;
+        margin-right: auto;
+        margin-top: 11%;
+        font-size: 0.85em;
+        font-family: "Holtwood One SC", serif;
+        font-weight: 700;
+        font-style: normal;
+    }
+}
+
+.pointing-hand
+{
+    width: 50%;
+    height: 50%;
+    margin-left: 2%;
+    margin-top: 11%;
+}
+
+.weather
+{
+    width: 40%;
+    height: 84%;
+    padding-top: 3%;
+    padding-left: 2.4%;
+    font-family: "Rubik Bubbles", system-ui;
+    font-weight: 400;
+    font-style: normal;
+
+    ul
+    {
+        columns: 2;
+        -webkit-columns: 2;
+        -moz-columns: 2;
+        padding-left: 10%;
+
+        li
+        {
+            font-size: 0.67em;
+            line-height: 1.5em;
+        }
+    }
+
+    h2
+    {
+        margin-bottom: 0;
+        text-align: center;
+        font-size: 1.2em;
+        line-height: 0.5em;
+    }
+}
+
+.wheel
+{
+    width: 20%;
+}
+
+.zodiac-wheel
+{
+    width: 80%;
+    margin-top: 8%;
+    margin-left: 15%;
+    height: min-content;
+}

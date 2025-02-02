@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Облачные сервисы MWS</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<header class="main-header">
+    <section class="mws-header">
+        <svg xmlns="http://www.w3.org/2000/svg" width="51" height="51" viewBox="0 0 51 51" fill="none"
+             data-v-023b5325="">
+            <rect x="1" y="1" width="49" height="49" stroke="#FF0033" stroke-width="2"></rect>
+            <path
+                d="M16.3025 5.61523L12.8476 12.7878L9.39396 5.61523H5.62109V16.461H8.26594V8.69809L11.6428 15.2562H14.0536L17.4305 8.69809V16.461H20.0753V5.61523H16.3025Z"
+                fill="#FF0033"></path>
+            <path
+                d="M44.063 5.61523L42.0565 13.6158L39.7117 5.61523H38.1781H38.1361H36.6024L34.2576 13.6158L32.2512 5.61523H29.4863L32.2656 16.461H35.7456L38.1565 8.27088L40.5685 16.461H44.0486L46.8266 5.61523H44.063Z"
+                fill="#FF0033"></path>
+            <path
+                d="M39.8293 38.8624C38.028 38.7316 36.4728 38.6176 36.4728 37.6468C36.4728 36.6004 37.5432 36.3951 39.3925 36.3951C40.9969 36.3951 42.1081 36.6124 42.3037 37.6624H45.347C45.137 35.3823 43.2421 34.3203 39.3913 34.3203C35.5404 34.3203 33.5304 35.4291 33.5304 37.7104C33.5304 40.5736 36.69 40.7944 39.2281 40.972C41.0329 41.098 42.5917 41.2072 42.5917 42.226C42.5917 43.3037 41.3785 43.5257 39.5557 43.5257C37.17 43.5257 36.5928 43.0085 36.396 42.052H33.3516C33.6024 44.5709 35.4048 45.6005 39.5557 45.6005C41.6389 45.6005 43.1197 45.3281 44.0833 44.7689C45.0698 44.1965 45.5486 43.3025 45.5486 42.0352C45.5486 39.28 42.3757 39.0484 39.8269 38.8624"
+                fill="#FF0033"></path>
+        </svg>
+        <div class="mws-links">
+            <div class="mws-link-black">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"
+                     data-v-023b5325="">
+                    <path
+                        d="M20.1892 4C20.7439 4 21.1623 4.49711 20.9385 5.42173L18.2235 18.4957C18.0337 19.4253 17.4839 19.649 16.7249 19.2165L10.2487 14.3299C10.2236 14.3115 10.2031 14.2873 10.189 14.2592C10.1749 14.2311 10.1675 14.2 10.1675 14.1684C10.1675 14.1368 10.1749 14.1057 10.189 14.0776C10.2031 14.0495 10.2236 14.0252 10.2487 14.0068L17.7272 7.10694C18.0678 6.79873 17.6542 6.6496 17.2066 6.92798L7.82071 12.9778C7.79225 12.9968 7.75993 13.0089 7.72621 13.0132C7.69249 13.0175 7.65825 13.0139 7.62609 13.0027L3.64112 11.7151C2.75557 11.4517 2.75557 10.8303 3.84061 10.3879L19.7853 4.10439C19.9118 4.04241 20.0491 4.00692 20.1892 4Z"
+                        fill="currentColor"></path>
+                </svg>
+            </div>
+            <div class="mws-link-black">
+                <svg data-v-023b5325="" width="24" height="24" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 28 28">
+                    <path fill="currentColor" fill-rule="evenodd" clip-rule="evenodd"
+                          d="M17.001 15.688L12.3037 10.9856L12.3061 10.9823C13.388 9.77952 13.929 9.1781 13.9214 7.99201C13.9139 6.80592 13.3964 6.24519 12.3615 5.12374C12.2547 5.00793 12.1451 4.89348 12.0332 4.78141C11.2429 3.99034 10.3842 3.51025 9.7684 3.23761C8.95304 2.87664 8.08573 2.97273 7.25916 3.22216C6.32705 3.50345 5.44736 3.97938 4.77478 4.6908C4.21822 5.26136 3.82544 5.81067 3.53899 6.46455C2.63108 8.53712 2.9396 10.9541 3.94655 12.9803C4.78189 14.6612 6.239 16.8988 8.77232 19.4348C11.2527 21.9179 13.2363 23.1568 14.9029 24.0013C16.9903 25.0589 19.5044 25.4011 21.6258 24.4136C22.2356 24.1298 22.7572 23.7469 23.2988 23.216C24.4009 22.1658 24.8099 20.7412 24.9613 19.8678C25.0488 19.3626 24.9869 18.8056 24.7871 18.3333C24.5242 17.7119 24.0357 16.797 23.1986 15.9589C23.0867 15.8469 22.9724 15.7372 22.8567 15.6302C21.7364 14.5942 21.1763 14.0762 19.9915 14.0686C18.8067 14.0611 18.2059 14.6026 17.0044 15.6857L17.001 15.688ZM10.3294 10.1528C9.86745 10.6349 9.87677 11.3987 10.3504 11.8693C10.5294 12.0472 10.708 12.2255 10.8863 12.404C12.6211 14.1406 14.3731 15.8665 16.1124 17.5948C16.5564 18.036 17.2614 18.0706 17.7464 17.675C18.3393 17.1913 18.8822 16.5813 19.5365 16.1876C19.6726 16.1057 19.758 16.0733 19.9787 16.0747C20.2224 16.0762 20.3018 16.1139 20.4091 16.179C20.6272 16.3114 20.8858 16.5386 21.4969 17.1038C21.5946 17.1942 21.6898 17.2855 21.7816 17.3775C22.3843 17.9808 22.7461 18.6529 22.9418 19.1155C22.9908 19.2316 23.0079 19.4006 22.9868 19.5248C22.8652 20.2264 22.5631 21.1475 21.9172 21.7629L21.8967 21.7827C21.4798 22.1914 21.1413 22.4268 20.7809 22.5946C19.3791 23.2471 17.5302 23.0841 15.8078 22.2114C14.3146 21.4548 12.5076 20.3371 10.1893 18.0163C7.8037 15.6281 6.47608 13.5665 5.7407 12.0867C4.92052 10.4363 4.76704 8.65623 5.3742 7.27023C5.54442 6.88167 5.78339 6.52848 6.20863 6.09254C6.2212 6.07966 6.23356 6.06664 6.24572 6.05349C6.83165 5.44432 7.69141 5.1409 8.38723 5.0087C8.55694 4.97667 8.79874 5.0021 8.95792 5.0723C9.41803 5.276 10.0479 5.6311 10.6162 6.19993C11.0355 6.61974 11.5079 7.0698 11.8133 7.57391C11.9689 7.8307 11.9576 8.19282 11.8047 8.44754C11.4258 9.0788 10.8387 9.62152 10.3294 10.1528Z"></path>
+                </svg>
+            </div>
+            <div class="mws-link-white">
+                <a href="tel:88002344444" class="mws-link">8 (800) 234-44-44</a>
+            </div>
+            <div class="mws-link-red">
+                <a href="#">Оставить заявку</a>
+            </div>
+        </div>
+    </section>
+    <section class="mws-menu-bar">
+        <button id="mws-products" class="mws-menu-button menu-bar-link">
+            Продукты
+            <svg data-v-0477ba8c="" viewBox="0 0 32 32" fill="currentColor" xmlns="http://www.w3.org/2000/svg"
+                 width="24"
+                 height="24" class="icon">
+                <path
+                    d="M6.254 12C5.13904 12 4.58067 13.3483 5.36906 14.1368L9.9588 18.7274C12.8067 21.5758 14.2306 23 16 23C17.7694 23 19.1934 21.5758 22.0412 18.7274L26.6309 14.1368C27.4193 13.3483 26.861 12 25.746 12C25.4141 12 25.0958 12.1319 24.861 12.3666L20.2713 16.9572C18.7974 18.4314 17.8662 19.3553 17.0979 19.9416C16.3874 20.4837 16.1174 20.4965 16 20.4965C15.8826 20.4965 15.6126 20.4837 14.9021 19.9416C14.1338 19.3553 13.2026 18.4314 11.7287 16.9572L7.13894 12.3666C6.90425 12.1319 6.58592 12 6.254 12Z"
+                    fill="currentColor"></path>
+            </svg>
+        </button>
+        <button id="mws-professional-services" class="mws-menu-button menu-bar-link">
+            Профессиональные сервисы
+            <svg data-v-0477ba8c="" viewBox="0 0 32 32" fill="currentColor" xmlns="http://www.w3.org/2000/svg"
+                 width="24"
+                 height="24" class="icon">
+                <path
+                    d="M6.254 12C5.13904 12 4.58067 13.3483 5.36906 14.1368L9.9588 18.7274C12.8067 21.5758 14.2306 23 16 23C17.7694 23 19.1934 21.5758 22.0412 18.7274L26.6309 14.1368C27.4193 13.3483 26.861 12 25.746 12C25.4141 12 25.0958 12.1319 24.861 12.3666L20.2713 16.9572C18.7974 18.4314 17.8662 19.3553 17.0979 19.9416C16.3874 20.4837 16.1174 20.4965 16 20.4965C15.8826 20.4965 15.6126 20.4837 14.9021 19.9416C14.1338 19.3553 13.2026 18.4314 11.7287 16.9572L7.13894 12.3666C6.90425 12.1319 6.58592 12 6.254 12Z"
+                    fill="currentColor"></path>
+            </svg>
+        </button>
+        <a class="menu-bar-link">Партнёрские сервисы</a>
+        <a class="menu-bar-link">Стать партнером</a>
+        <a class="menu-bar-link">Акции</a>
+        <button id="mws-events" class="mws-menu-button menu-bar-link">
+            События
+            <svg data-v-0477ba8c="" viewBox="0 0 32 32" fill="currentColor" xmlns="http://www.w3.org/2000/svg"
+                 width="24"
+                 height="24" class="icon">
+                <path
+                    d="M6.254 12C5.13904 12 4.58067 13.3483 5.36906 14.1368L9.9588 18.7274C12.8067 21.5758 14.2306 23 16 23C17.7694 23 19.1934 21.5758 22.0412 18.7274L26.6309 14.1368C27.4193 13.3483 26.861 12 25.746 12C25.4141 12 25.0958 12.1319 24.861 12.3666L20.2713 16.9572C18.7974 18.4314 17.8662 19.3553 17.0979 19.9416C16.3874 20.4837 16.1174 20.4965 16 20.4965C15.8826 20.4965 15.6126 20.4837 14.9021 19.9416C14.1338 19.3553 13.2026 18.4314 11.7287 16.9572L7.13894 12.3666C6.90425 12.1319 6.58592 12 6.254 12Z"
+                    fill="currentColor"></path>
+            </svg>
+        </button>
+        <button id="mws-support" class="mws-menu-button menu-bar-link">
+            Поддержка
+            <svg data-v-0477ba8c="" viewBox="0 0 32 32" fill="currentColor" xmlns="http://www.w3.org/2000/svg"
+                 width="24"
+                 height="24" class="icon">
+                <path
+                    d="M6.254 12C5.13904 12 4.58067 13.3483 5.36906 14.1368L9.9588 18.7274C12.8067 21.5758 14.2306 23 16 23C17.7694 23 19.1934 21.5758 22.0412 18.7274L26.6309 14.1368C27.4193 13.3483 26.861 12 25.746 12C25.4141 12 25.0958 12.1319 24.861 12.3666L20.2713 16.9572C18.7974 18.4314 17.8662 19.3553 17.0979 19.9416C16.3874 20.4837 16.1174 20.4965 16 20.4965C15.8826 20.4965 15.6126 20.4837 14.9021 19.9416C14.1338 19.3553 13.2026 18.4314 11.7287 16.9572L7.13894 12.3666C6.90425 12.1319 6.58592 12 6.254 12Z"
+                    fill="currentColor"></path>
+            </svg>
+        </button>
+        <a class="menu-bar-link">Карьера</a>
+        <section class="mws-drop-down-menu">
+            <div id="mws-products-form" class="mws-products-titles mws-menu-unit">
+                <h2>Продукты</h2>
+                <button id="mws-iaas" class="mws-product-button mws-products-title active-product">Вычисления и хранение
+                    (IaaS)
+                </button>
+                <button id="mws-saas" class="mws-product-button mws-products-title">Бизнес-приложения (SaaS)</button>
+                <button id="mws-dbaas" class="mws-product-button mws-products-title">Базы данных и потоковые сервисы
+                    (DBaaS)
+                </button>
+                <button id="mws-secaas" class="mws-product-button mws-products-title">Кибербезопасность (SECaaS)
+                </button>
+                <button id="mws-naas" class="mws-product-button mws-products-title">Сеть и медиа (NaaS)</button>
+                <button id="mws-ai" class="mws-product-button mws-products-title">ИИ-облако</button>
+            </div>
+            <div id="mws-iaas-list" class="mws-product-list mws-menu-unit">
+                <h2>Вычисления и хранение (IaaS)</h2>
+                <ul class="mws-content-list">
+                    <li class="mws-content-list-item">
+                        <a href="/services/virtual-infrastructure/" class="content-list-link">
+                            <img
+                                width="40"
+                                height="40"
+                                alt="MWS IaaS item"
+                                src="https://ru-msk-2.store.cloud.mts.ru/uploads/VI_icon_5892a15699.svg"
+                            />
+                            <div class="item">
+                                <div class="item-title">Виртуальная инфраструктура</div>
+                                <div class="item-subtitle">
+                                    Комплексное решение для&nbsp;развертывания виртуальной
+                                    <nobr>ИТ-инфраструктуры</nobr>
+                                    для&nbsp;проектов разных масштабов
+                                </div>
+                            </div>
+                        </a>
+                    </li>
+                    <li class="mws-content-list-item">
+                        <a href="/services/iaas-152-fz/" class="content-list-link">
+                            <img
+                                width="40"
+                                height="40"
+                                alt="MWS IaaS item"
+                                src="https://ru-msk-2.store.cloud.mts.ru/uploads/VI_152_icon_fd8ffd9674.svg"
+                            />
+                            <div class="item">
+                                <div class="item-title">Виртуальная инфраструктура. Аттестованный сегмент 152-ФЗ</div>
+                                <div class="item-subtitle">Защищенное облако для ИСПДн</div>
+                            </div>
+                        </a>
+                    </li>
+                    <li class="mws-content-list-item">
+                        <a href="/services/virtual-infrastructure-gpu/" class="content-list-link">
+                            <img
+                                width="40"
+                                height="40"
+                                alt="MWS IaaS item"
+                                src="https://ru-msk-2.store.cloud.mts.ru/uploads/VI_GPU_icon_5b5af9161e.svg"
+                            />
+                            <div class="item">
+                                <div class="item-title">Виртуальная инфраструктура с GPU</div>
+                                <div class="item-subtitle">Графический ускоритель</div>
+                            </div>
+                        </a>
+                    </li>
+                    <li class="mws-content-list-item">
+                        <a href="/services/object-storage-s3/" class="content-list-link">
+                            <img data-v-5d804d9c=""
+                                 width="40"
+                                 height="40"
+                                 alt="MWS IaaS item"
+                                 src="https://ru-msk-2.store.cloud.mts.ru/uploads/s3_icon_0a3a26b5d4.svg"
+                            />
+                            <div class="item">
+                                <div class="item-title">Объектное хранилище</div>
+                                <div class="item-subtitle">
+                                    Сервис хранения данных любого объема и формата с
+                                    доступом к хранимой информации через интернет из любой точки мира
+                                </div>
+                            </div>
+                        </a>
+                    </li>
+                    <li class="mws-content-list-item">
+                        <a href="/services/backup/" class="content-list-link">
+                            <img
+                                width="40"
+                                height="40"
+                                alt="MWS IaaS item"
+                                src="https://ru-msk-2.store.cloud.mts.ru/uploads/backup_icon_b427ce391e.svg"
+                            />
+                            <div class="item">
+                                <div class="item-title">Резервное копирование</div>
+                                <div class="item-subtitle">
+                                    Резервное копирование данных с персональных
+                                    компьютеров, VDI и любых устройств с пользовательскими ОC
+                                </div>
+                            </div>
+                        </a>
+                    </li>
+                    <li class="mws-content-list-item">
+                        <a href="/services/vdi-desktops/" class="content-list-link">
+                            <img data-v-5d804d9c=""
+                                 width="40"
+                                 height="40"
+                                 alt="MWS IaaS item"
+                                 src="https://ru-msk-2.store.cloud.mts.ru/uploads/vdi_icon_73cf48b578.svg"
+                            />
+                            <div class="item">
+                                <div class="item-title">VDI</div>
+                                <div class="item-subtitle">Виртуальные рабочие места</div>
+                            </div>
+                        </a>
+                    </li>
+                    <li class="mws-content-list-item">
+                        <a href="/services/disaster-recovery/" class="content-list-link">
+                            <img data-v-5d804d9c=""
+                                 width="40"
+                                 height="40"
+                                 alt="MWS IaaS item"
+                                 src="https://ru-msk-2.store.cloud.mts.ru/uploads/DR_icon_efd7415ba0.svg"
+                            />
+                            <div class="item">
+                                <div class="item-title">Катастрофоустойчивая инфраструктура</div>
+                                <div class="item-subtitle">Послеаварийное восстановление</div>
+                            </div>
+                        </a>
+                    </li>
+                    <li class="mws-content-list-item">
+                        <a href="/services/managed-kubernetes/" class="content-list-link">
+                            <img
+                                width="40"
+                                height="40"
+                                alt="MWS IaaS item"
+                                src="https://ru-msk-2.store.cloud.mts.ru/uploads/Kuber_icon_39ed7a8fdf.svg"
+                            />
+                            <div class="item">
+                                <div class="item-title">Managed Kubernetes Service</div>
+                                <div class="item-subtitle">Cервис для быстрого развертывания кластеров Kubernetes</div>
+                            </div>
+                        </a>
+                    </li>
+                    <li class="mws-content-list-item">
+                        <a href="/state-cloud/" class="content-list-link">
+                            <img
+                                width="40"
+                                height="40"
+                                alt="MWS IaaS item"
+                                src="https://ru-msk-2.store.cloud.mts.ru/uploads/state_cloud_icon_aa739087b6.svg"
+                            />
+                            <div class="item">
+                                <div class="item-title">Импортозамещённое облако</div>
+                                <div class="item-subtitle">Облако с&nbsp;защитой информации. Бета-тест</div>
+                            </div>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <div id="mws-saas-list" class="mws-product-list mws-menu-unit">
+                <h2>Бизнес-приложения (SaaS)</h2>
+                <ul class="mws-content-list">
+                    <li class="mws-content-list-item">
+                        <a href="/services/business-applications/" class="content-list-link">
+                            <img
+                                width="40" height="40"
+                                alt="MWS SaaS item"
+                                src="https://ru-msk-2.store.cloud.mts.ru/uploads/business_apps_icon_814e8b14cc.svg"
+                            />
+                            <div class="item">
+                                <div class="item-title">Офисные приложения</div>
+                                <div class="item-subtitle">Сервисы для построения экосистемы цифровых рабочих мест</div>
+                            </div>
+                        </a>
+                    </li>
+                    <li class="mws-content-list-item">
+                        <a href="/services/kedo/" class="content-list-link">
+                            <img
+                                width="40"
+                                height="40"
+                                alt="MWS SaaS item"
+                                src="https://ru-msk-2.store.cloud.mts.ru/uploads/kedo_icon_28f45b2d7f.svg"
+                            />
+                            <div class="item">
+                                <div class="item-title">КЭДО</div>
+                                <div class="item-subtitle">Система кадрового электронного документооборота</div>
+                            </div>
+                        </a>
+                    </li>
+                    <li class="mws-content-list-item">
+                        <a href="/services/vdi-desktops/" class="content-list-link">
+                            <img
+                                width="40"
+                                height="40"
+                                alt="MWS SaaS item"
+                                src="https://ru-msk-2.store.cloud.mts.ru/uploads/vdi_icon_73cf48b578.svg"
+                            />
+                            <div class="item">
+                                <div class="item-title">VDI</div>
+                                <div class="item-subtitle">Виртуальные рабочие места</div>
+                            </div>
+                        </a>
+                    </li>
+                    <li class="mws-content-list-item">
+                        <a href="/services/1c-services/" class="content-list-link">
+                            <img
+                                width="40"
+                                height="40"
+                                alt="MWS SaaS item"
+                                src="https://ru-msk-2.store.cloud.mts.ru/uploads/1c_icon_6c9b2d95f0.svg"
+                            />
+                            <div class="item">
+                                <div class="item-title">Комплекс услуг по 1С</div>
+                                <div class="item-subtitle">Хостинг, сопровождение, лицензии</div>
+                            </div>
+                        </a>
+                    </li>
+                    <li class="mws-content-list-item">
+                        <a href="/services/rpa/" class="content-list-link">
+                            <img
+                                width="40"
+                                height="40"
+                                alt="MWS SaaS item"
+                                src="https://ru-msk-2.store.cloud.mts.ru/uploads/rpa2_icon_66ee43b781.svg"
+                            />
+                            <div class="item">
+                                <div class="item-title">RPA MWS</div>
+                                <div class="item-subtitle">Первая российская облачная платформа роботизации на базе
+                                    Primo RPA
+                                </div>
+                            </div>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <div id="mws-dbaas-list" class="mws-product-list mws-menu-unit">
+                <h2>Базы данных и потоковые сервисы (DBaaS)</h2>
+                <ul class="mws-content-list">
+                    <li class="mws-content-list-item">
+                        <a href="/services/ml-platform/" class="content-list-link">
+                            <img
+                                width="40"
+                                height="40"
+                                alt="MWS DBaaS item"
+                                src="https://ru-msk-2.store.cloud.mts.ru/uploads/ML_icon_0abd3f5440.svg"
+                            />
+                            <div class="item">
+                                <div class="item-title">ML-платформа</div>
+                                <div class="item-subtitle">Облачная платформа для ML-разработки полного цикла</div>
+                            </div>
+                        </a>
+                    </li>
+                    <li class="mws-content-list-item">
+                        <a href="/services/dbaas-for-postgresql/" class="content-list-link">
+                            <img
+                                width="40"
+                                height="40"
+                                alt="MWS DBaaS item"
+                                src="https://ru-msk-2.store.cloud.mts.ru/uploads/postgresql_icon_3a1baccda5.svg"
+                            />
+                            <div class="item">
+                                <div class="item-title">DBaaS for PostgreSQL</div>
+                                <div class="item-subtitle">Управление базой данных PostgresSQL</div>
+                            </div>
+                        </a>
+                    </li>
+                    <li class="mws-content-list-item">
+                        <a href="/services/arenadata/" class="content-list-link">
+                            <img
+                                width="40"
+                                height="40"
+                                alt="MWS DBaaS item"
+                                src="https://ru-msk-2.store.cloud.mts.ru/uploads/arenadata_icon_b649d5fafb.svg"
+                            />
+                            <div class="item">
+                                <div class="item-title">СУБД из облака MWS</div>
+                                <div class="item-subtitle">Поможем создать инфраструктуру данных любой сложности под
+                                    задачи
+                                    бизнеса
+                                </div>
+                            </div>
+                        </a>
+                    </li>
+                    <li class="mws-content-list-item">
+                        <a href="/services/mws-bi/" class="content-list-link">
+                            <img
+                                width="40"
+                                height="40"
+                                alt="MWS DBaaS item"
+                                src="https://ru-msk-2.store.cloud.mts.ru/uploads/bi_analytics_icon_d6baac50c7.svg"
+                            />
+                            <div class="item">
+                                <div class="item-title">BI-платформы в&nbsp;облаке</div>
+                                <div class="item-subtitle">Помогаем анализировать и&nbsp;визуализировать данные вашего
+                                    бизнеса
+                                </div>
+                            </div>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <div id="mws-secaas-list" class="mws-product-list mws-menu-unit">
+                <h2>Кибербезопасность (SECaaS)</h2>
+                <ul class="mws-content-list">
+                    <li class="mws-content-list-item">
+                        <a href="/services/waf/" class="content-list-link">
+                            <img
+                                width="40"
+                                height="40"
+                                alt="MWS SECaaS item"
+                                src="https://ru-msk-2.store.cloud.mts.ru/uploads/WAF_icon_5c8b18bcb1.svg"
+                            />
+                            <div class="item">
+                                <div class="item-title">Защита веб-приложений (WAF)</div>
+                                <div class="item-subtitle">Платформа защиты от атак и уязвимостей в веб‑приложениях
+                                </div>
+                            </div>
+                        </a>
+                    </li>
+                    <li class="mws-content-list-item">
+                        <a href="/services/anti-ddos/" class="content-list-link">
+                            <img
+                                width="40"
+                                height="40"
+                                alt="MWS SECaaS item"
+                                src="https://ru-msk-2.store.cloud.mts.ru/uploads/anti_ddos_icon_ac177d4c75.svg"
+                            />
+                            <div class="item">
+                                <div class="item-title">Защита от DDoS-атак</div>
+                                <div class="item-subtitle">Круглосуточный мониторинг и защита ресурсов</div>
+                            </div>
+                        </a>
+                    </li>
+                    <li class="mws-content-list-item">
+                        <a href="/services/soc/" class="content-list-link">
+                            <img
+                                width="40"
+                                height="40"
+                                alt="MWS SECaaS item"
+                                src="https://ru-msk-2.store.cloud.mts.ru/uploads/soc_icon_9b4945f02f.svg"
+                            />
+                            <div class="item">
+                                <div class="item-title">Security Operation Center (SOC)</div>
+                                <div class="item-subtitle">Комплексный центр круглосуточного мониторинга и реагирования
+                                    на
+                                    инциденты информационной безопасности
+                                </div>
+                            </div>
+                        </a>
+                    </li>
+                    <li class="mws-content-list-item">
+                        <a href="/services/anti-virus-protection/" class="content-list-link">
+                            <img
+                                width="40"
+                                height="40"
+                                alt="MWS SECaaS item"
+                                src="https://ru-msk-2.store.cloud.mts.ru/uploads/antivirus_icon_2e047461bc.svg"
+                            />
+                            <div class="item">
+                                <div class="item-title"> Антивирусная защита</div>
+                                <div class="item-subtitle">Защита виртуальных машин от вредоносного ПО</div>
+                            </div>
+                        </a>
+                    </li>
+                    <li class="mws-content-list-item">
+                        <a href="/services/mfa/" class="content-list-link">
+                            <img
+                                width="40"
+                                height="40"
+                                alt="MWS SECaaS item"
+                                src="https://ru-msk-2.store.cloud.mts.ru/uploads/MFA_icon_2f1a076a14.svg"
+                            />
+                            <div class="item">
+                                <div class="item-title">Сервис многофакторной аутентификации (MFA)</div>
+                                <div class="item-subtitle">Сервис защиты данных корпоративных учетных записей</div>
+                            </div>
+                        </a>
+                    </li>
+                    <li class="mws-content-list-item">
+                        <a href="/services/gost-vpn/" class="content-list-link">
+                            <img
+                                width="40"
+                                height="40"
+                                alt="MWS SECaaS item"
+                                src="https://ru-msk-2.store.cloud.mts.ru/uploads/gost_vpn_icon_62c68020b0.svg"
+                            />
+                            <div class="item">
+                                <div class="item-title">ГОСТ VPN</div>
+                                <div class="item-subtitle">Сервис для организации защищенного канала между
+                                    геораспределенными
+                                    объектами
+                                </div>
+                            </div>
+                        </a>
+                    </li>
+                    <li class="mws-content-list-item">
+                        <a href="/services/security-awareness/" class="content-list-link">
+                            <img
+                                width="40"
+                                height="40"
+                                alt="MWS SECaaS item"
+                                src="https://ru-msk-2.store.cloud.mts.ru/uploads/sec_awareness_icon_8fe011c2f7.svg"
+                            />
+                            <div class="item">
+                                <div class="item-title">Security Awareness</div>
+                                <div class="item-subtitle">Сервис повышения киберграмотности сотрудников</div>
+                            </div>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <div id="mws-naas-list" class="mws-product-list mws-menu-unit">
+                <h2>Сеть и медиа (NaaS)</h2>
+                <ul class="mws-content-list">
+                    <li class="mws-content-list-item">
+                        <a href="/services/vpn-interconnect/" class="content-list-link">
+                            <img
+                                width="40"
+                                height="40"
+                                alt="MWS NaaS item"
+                                src="https://ru-msk-2.store.cloud.mts.ru/uploads/VPN_interconnect_icon_f424d9991c.svg"
+                            />
+                            <div class="item">
+                                <div class="item-title">CloudVPN Interconnect</div>
+                                <div class="item-subtitle">Изолированные сетевые соединения</div>
+                            </div>
+                        </a>
+                    </li>
+                    <li class="mws-content-list-item">
+                        <a href="/services/sd-wan/" class="content-list-link">
+                            <img
+                                width="40"
+                                height="40"
+                                alt="MWS NaaS item"
+                                src="https://ru-msk-2.store.cloud.mts.ru/uploads/sd_wan_icon_b1a264d075.svg"
+                            />
+                            <div class="item">
+                                <div class="item-title">Cloud SD-WAN</div>
+                                <div class="item-subtitle">Организация распределенной сетевой ИТ-инфраструктуры</div>
+                            </div>
+                        </a>
+                    </li>
+                    <li class="mws-content-list-item">
+                        <a href="/services/cdn/" class="content-list-link">
+                            <img
+                                width="40"
+                                height="40"
+                                alt="MWS NaaS item"
+                                src="https://ru-msk-2.store.cloud.mts.ru/uploads/cdn_icon_1707659733.svg"
+                            />
+                            <div class="item">
+                                <div class="item-title">Cloud CDN</div>
+                                <div class="item-subtitle">Быстрая доставка статического контента</div>
+                            </div>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <div id="mws-ai-list" class="mws-product-list mws-menu-unit">
+                <h2>ИИ-облако</h2>
+                <ul class="mws-content-list">
+                    <li class="mws-content-list-item">
+                        <a href="/services/virtual-infrastructure-gpu/" class="content-list-link">
+                            <img
+                                width="40"
+                                height="40"
+                                alt="MWS AI item"
+                                src="https://ru-msk-2.store.cloud.mts.ru/uploads/VI_GPU_icon_5b5af9161e.svg"
+                            />
+                            <div class="item">
+                                <div class="item-title">Виртуальная инфраструктура с GPU</div>
+                                <div class="item-subtitle">Графический ускоритель</div>
+                            </div>
+                        </a>
+                    </li>
+                    <li class="mws-content-list-item">
+                        <a href="/services/ml-platform/" class="content-list-link">
+                            <img
+                                width="40"
+                                height="40"
+                                alt="MWS AI item"
+                                src="https://ru-msk-2.store.cloud.mts.ru/uploads/ML_icon_0abd3f5440.svg"
+                            />
+                            <div class="item">
+                                <div class="item-title">ML-платформа</div>
+                                <div class="item-subtitle">Облачная платформа для ML-разработки полного цикла</div>
+                            </div>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </section>
+    </section>
+</header>
+</body>
+<script src="js/script.js"></script>
+</html>
