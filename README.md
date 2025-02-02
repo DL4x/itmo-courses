@@ -9,3 +9,4 @@
 - ### <a href="https://github.com/DL4x/itmo-courses/tree/main/OS-course">Курс &laquo;Операционные системы Lite&raquo;</a>
 - ### <a href="https://github.com/DL4x/itmo-courses/tree/main/optimization-methods-course">Курс &laquo;Методы оптимизации&raquo;</a>
 - ### <a href="https://github.com/DL4x/itmo-courses/tree/main/java-course">Курс &laquo;Технологии программирования Java&raquo;</a>
+- ### <a href="https://github.com/DL4x/itmo-courses/tree/main/frontend-course">Курс &laquo;Фронтенд разработка&raquo;</a>

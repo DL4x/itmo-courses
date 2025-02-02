@@ -1,2 +1,6 @@
+*.git
+*.github
 *.idea
+*.gradle
+*.kotlin
 *.DS_Store
