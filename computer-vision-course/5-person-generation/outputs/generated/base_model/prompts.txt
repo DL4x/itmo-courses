@@ -1,0 +1,12 @@
+# portraits | token_scenes | gender_scenes
+00_portrait_0.png	egor_person in cyberpunk city, neon lights, portrait, high quality, realism, detailed skin, cinematic light
+01_portrait_1.png	egor_person made of polished metal, studio portrait, high quality, realism, detailed skin, cinematic light
+02_portrait_2.png	egor_person in an elven city, fantasy architecture, portrait, high quality, realism, detailed skin, cinematic light
+03_portrait_3.png	egor_person in snowy mountains at sunrise, portrait, high quality, realism, detailed skin, cinematic light
+04_portrait_4.png	egor_person in futuristic spaceship interior, portrait, high quality, realism, detailed skin, cinematic light
+05_token_0.png	egor_person in a forest, high quality, realism, detailed skin, cinematic light
+06_token_1.png	egor_person in a city, high quality, realism, detailed skin, cinematic light
+07_token_2.png	egor_person in a beach, high quality, realism, detailed skin, cinematic light
+08_gender_0.png	man in a forest, high quality, realism, detailed skin, cinematic light
+09_gender_1.png	man in a city, high quality, realism, detailed skin, cinematic light
+10_gender_2.png	man in a beach, high quality, realism, detailed skin, cinematic light

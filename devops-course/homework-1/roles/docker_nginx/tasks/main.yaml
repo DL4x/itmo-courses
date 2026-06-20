@@ -1,0 +1,128 @@
+# Nginx tasks
+- name: Install Nginx
+  ansible.builtin.apt:
+    name: "nginx={{ docker_nginx__nginx_version }}"
+    update_cache: true
+    state: present
+  notify:
+    - Restart Nginx
+
+- name: Copy new config
+  ansible.builtin.template:
+    src: "{{ docker_nginx__config_src }}"
+    dest: "{{ docker_nginx__config_temp }}"
+    owner: root
+    group: root
+    mode: "0644"
+
+- name: Validate new config
+  ansible.builtin.command:
+    cmd: "nginx -t -c '{{ docker_nginx__config_temp }}'"
+  changed_when: false
+
+- name: Copy config
+  ansible.builtin.copy:
+    src: "{{ docker_nginx__config_temp }}"
+    dest: "{{ docker_nginx__config_dest }}"
+    owner: root
+    group: root
+    mode: "0644"
+    remote_src: true
+  register: docker_nginx__nginx_conf
+
+- name: Copy static
+  ansible.builtin.copy:
+    src: "{{ docker_nginx__static_src }}"
+    dest: "{{ docker_nginx__static_dest }}"
+    owner: root
+    group: root
+    mode: "0644"
+  register: docker_nginx__static_files
+  when: docker_nginx__use_static
+
+# # SSL tasks
+- name: Setup SSL directories
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: directory
+    mode: "0755"
+  loop:
+    - "{{ docker_nginx__ssl_certs_dest }}"
+    - "{{ docker_nginx__ssl_private_dest }}"
+  when: docker_nginx__use_https
+
+- name: Generate private key
+  community.crypto.openssl_privatekey:
+    path: "{{ docker_nginx__ssl_private_dest }}/nginx.key"
+    size: 2048
+    type: RSA
+    state: present
+    mode: "0644"
+  when: docker_nginx__use_https
+
+- name: Generate CSR
+  community.crypto.openssl_csr:
+    path: "{{ docker_nginx__ssl_private_dest }}/nginx.csr"
+    privatekey_path: "{{ docker_nginx__ssl_private_dest }}/nginx.key"
+    common_name: "localhost"
+    state: present
+  when: docker_nginx__use_https
+
+- name: Generate SSL certificate
+  community.crypto.x509_certificate:
+    path: "{{ docker_nginx__ssl_certs_dest }}/nginx.crt"
+    privatekey_path: "{{ docker_nginx__ssl_private_dest }}/nginx.key"
+    csr_path: "{{ docker_nginx__ssl_private_dest }}/nginx.csr"
+    provider: selfsigned
+    selfsigned_not_after: "+365d"
+    state: present
+    mode: "0600"
+  register: docker_nginx__ssl_cert
+  when: docker_nginx__use_https
+
+# Docker tasks
+- name: Install Docker
+  ansible.builtin.apt:
+    name: docker.io
+    update_cache: true
+    state: present
+
+- name: Start Docker service
+  ansible.builtin.service:
+    name: docker
+    state: started
+    enabled: true
+
+- name: Build Docker volumes
+  ansible.builtin.set_fact:
+    docker_nginx__volumes: >
+      {{
+        [
+          docker_nginx__config_dest ~ ":" ~ docker_nginx__config_dest ~ ":ro"
+        ]
+        + (
+          [
+            docker_nginx__ssl_certs_dest ~ "/nginx.crt:" ~ docker_nginx__ssl_certs_dest ~ "/nginx.crt:ro",
+            docker_nginx__ssl_private_dest ~ "/nginx.key:" ~ docker_nginx__ssl_private_dest ~ "/nginx.key:ro"
+          ] if docker_nginx__use_https else []
+        )
+        + (
+          [
+            docker_nginx__static_dest ~ ":" ~ docker_nginx__static_dest ~ ":ro"
+          ] if docker_nginx__use_static else []
+        )
+      }}
+
+- name: Run Nginx in Docker
+  community.docker.docker_container:
+    name: "{{ docker_nginx__name }}"
+    image: "{{ docker_nginx__image }}"
+    ports: "{{ docker_nginx__ports }}"
+    volumes: "{{ docker_nginx__volumes }}"
+    restart_policy: always
+    recreate: >-
+      {{
+        docker_nginx__nginx_conf.changed
+        or docker_nginx__ssl_cert.changed
+        or docker_nginx__static_files.changed | default(false)
+      }}

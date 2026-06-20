@@ -1,0 +1,16 @@
+docker_nginx__name: nginx
+docker_nginx__image: nginx:latest
+docker_nginx__ports:
+  - "80:80"
+  - "443:443"
+docker_nginx__server_name: default_server
+
+docker_nginx__nginx_version: 1.18.0-6ubuntu14.7
+docker_nginx__config_src: nginx.conf.j2
+docker_nginx__config_dest: /etc/nginx/nginx.conf
+
+docker_nginx__ssl_certs_dest: /etc/ssl/certs
+docker_nginx__ssl_private_dest: /etc/ssl/private
+
+docker_nginx__static_src: static/
+docker_nginx__static_dest: /usr/share/nginx/html

@@ -1,0 +1,5 @@
+include:
+  - variables/default.yaml
+  - variables/dotenv.yaml
+  - variables/harbor.yaml
+  - variables/vars.yaml

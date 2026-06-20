@@ -1,0 +1,15 @@
+stages:
+  - deploy
+
+Deploy Proxy:
+  stage: deploy
+  tags:
+    - prom
+  needs: []
+  script:
+    - docker stop proxy || true
+    - docker rm proxy || true
+    - docker build -t reverse-proxy .
+    - docker run -d -p 10131:10131 --name proxy reverse-proxy
+  only:
+    - main

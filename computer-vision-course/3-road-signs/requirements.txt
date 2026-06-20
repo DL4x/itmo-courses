@@ -1,0 +1,22 @@
+# Data
+kagglehub[pandas-datasets]>=0.2.0
+pandas>=2.0
+opencv-python-headless>=4.8
+Pillow>=10.0
+numpy>=1.24
+
+# Training & inference
+ultralytics>=8.3.0
+torch>=2.0
+torchvision>=0.15
+
+# Tracking
+supervision>=0.21.0
+lapx>=0.5.2
+
+# Evaluation
+scikit-image>=0.21
+scipy>=1.11
+
+# Video
+tqdm>=4.65

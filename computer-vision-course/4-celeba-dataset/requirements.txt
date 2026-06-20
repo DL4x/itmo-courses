@@ -1,0 +1,11 @@
+torch
+torchvision
+torchaudio
+facenet-pytorch
+pandas
+numpy
+tqdm
+Pillow
+matplotlib
+torch-fidelity
+pyyaml

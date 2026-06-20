@@ -1,0 +1,4 @@
+include:
+  - project: itmo-1/group-1/shulpin-egor/homework-3/counter-ci-templates
+    ref: main
+    file: pipelines/deploy.yaml

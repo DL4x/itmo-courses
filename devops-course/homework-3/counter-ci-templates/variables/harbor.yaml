@@ -1,0 +1,6 @@
+variables:
+  HARBOR_HOST: harbor.devops-teta.ru
+  HARBOR_PROJECT: eshulpin
+  HARBOR_USER: robot_eshulpin+ci_push
+  HARBOR_PASSWORD: $__HARBOR_PASSWORD
+  HARBOR_IMAGE: $HARBOR_HOST/$HARBOR_PROJECT/$CI_PROJECT_NAME

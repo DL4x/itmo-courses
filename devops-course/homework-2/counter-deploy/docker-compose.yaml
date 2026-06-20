@@ -1,0 +1,12 @@
+services:
+  frontend:
+    image: $counter_frontend_IMAGE
+  backend:
+    image: $counter_backend_IMAGE
+  nginx:
+    image: nginx:1.20
+    volumes:
+      - ./files/default.conf:/etc/nginx/conf.d/default.conf:ro
+    ports:
+      - 10132:10132/tcp
+

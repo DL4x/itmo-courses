@@ -1,0 +1,7 @@
+clip_personalized: 0.30971653353084216
+identity_cosine: 0.4695597097277641
+quality_metric: tenengrad_higher_better
+quality_personalized: 0.002848981334616176
+clip_gender_base: 0.2975715448458989
+clip_gender_personalized: 0.29075296719868976
+clip_gender_delta: -0.0068185776472091675

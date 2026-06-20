@@ -1,0 +1,48 @@
+include:
+  - local: variables/main.yaml
+  - local: jobs/kaniko.yaml
+  - local: rules/main.yaml
+  - local: jobs/poetry.yaml
+  - local: jobs/dotenv-push.yaml
+
+stages:
+  - build
+  - publish
+  - deploy
+
+Build Package:
+  extends:
+    - .job__poetry_build
+  stage: build
+  needs: []
+  artifacts:
+    expire_in: 1h
+    paths:
+      - dist
+  rules:
+    - !reference [.rule__on_merge_requests]
+    - !reference [.rule__on_default_branch]
+    - !reference [.rule__on_release_tag] 
+
+Publish Package:
+  extends:
+  - .job__kaniko_publish_image
+  stage: publish
+  needs:
+    - job: Build Package
+      artifacts: true
+  interruptible: false
+  rules:
+    - !reference [.rule__on_default_branch] 
+    - !reference [.rule__on_release_tag] 
+
+Deploy Job:
+  stage: deploy
+  extends:
+    - .job__dotenv_push
+  needs:
+    - job: Publish Package
+      artifacts: true
+  rules:
+    - !reference [.rule__on_default_branch] 
+    - !reference [.rule__on_release_tag] 

@@ -1,0 +1,25 @@
+include:
+  - local: jobs/git-strategy.yaml
+  - local: variables/dotenv.yaml
+
+.job__dotenv_push:
+  stage: publish
+  image:
+    name: $KANIKO_IMAGE
+    entrypoint: [""]
+  script: 
+    - export PUSH_DOTENV_TOKEN=$__DEPLOY_TOKEN
+    - cat $CI_PROJECT_NAME
+    - git clone --depth 1 --branch "$PUSH_DOTENV_PROJECT_BRANCH" "https://ci-bot:$PUSH_DOTENV_TOKEN@$CI_SERVER_HOST/${PUSH_DOTENV_PROJECT_PATH}.git" $PUSH_DOTENV_TARGET_DIR
+    - git -C $PUSH_DOTENV_TARGET_DIR config user.name ci-bot
+    - git -C $PUSH_DOTENV_TARGET_DIR config user.email ci-bot@git.devops-teta.ru
+    - ls -l $PUSH_DOTENV_TARGET_DIR/$PUSH_DOTENV_VARS_PATH 
+    - PUSH_DOTENV_TARGET_PATH="$PUSH_DOTENV_TARGET_DIR/$PUSH_DOTENV_VARS_PATH/${CI_PROJECT_NAME//-/_}.env"
+    - cp $CI_PROJECT_NAME $PUSH_DOTENV_TARGET_PATH
+    - IFCHANGED=$(git -C $PUSH_DOTENV_TARGET_DIR  status --porcelain)
+    - if [ ! -n "${IFCHANGED:-}" ]; then echo "Not changed"; exit 0; fi
+    - git -C $PUSH_DOTENV_TARGET_DIR add .
+    - git -C $PUSH_DOTENV_TARGET_DIR commit -m "$CI_COMMIT_MESSAGE"
+    - git -C $PUSH_DOTENV_TARGET_DIR push origin "HEAD:$PUSH_DOTENV_PROJECT_BRANCH"
+  extends:
+    - .job__no_clone

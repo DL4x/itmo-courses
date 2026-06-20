@@ -1,0 +1,53 @@
+seed: 42
+
+model:
+  base_model: "runwayml/stable-diffusion-v1-5"
+  revision: null
+  torch_dtype: "float16"
+
+paths:
+  train_images_dir: "./data/train_images"
+  class_images_dir: "./data/class_images"
+  outputs_dir: "./outputs"
+  lora_dir: "./outputs/lora"
+  generated_dir: "./outputs/generated"
+
+train:
+  token: "egor_person"
+  gender: "man"
+  instance_prompt: "photo of egor_person person"
+  class_prompt: "photo of a man"
+  image_size: 512
+  train_batch_size: 1
+  gradient_accumulation_steps: 4
+  learning_rate: 1.0e-4
+  max_train_steps: 1800
+  num_class_images: 200
+  prior_loss_weight: 1.0
+  num_workers: 0
+  lr_scheduler: "cosine"
+  lr_warmup_steps: 100
+  save_every_steps: 200
+  resume_from_checkpoint: null
+
+generation:
+  guidance_scale: 7.5
+  num_inference_steps: 35
+  num_images_per_prompt: 1
+  seed: 42
+  per_image_seed: true
+  quality_suffix: "high quality, realism, detailed skin, cinematic light"
+  portraits:
+    - "{token} in cyberpunk city, neon lights, portrait"
+    - "{token} made of polished metal, studio portrait"
+    - "{token} in an elven city, fantasy architecture, portrait"
+    - "{token} in snowy mountains at sunrise, portrait"
+    - "{token} in futuristic spaceship interior, portrait"
+  token_scenes:
+    - "{token} in a forest"
+    - "{token} in a city"
+    - "{token} in a beach"
+  gender_scenes:
+    - "{gender} in a forest"
+    - "{gender} in a city"
+    - "{gender} in a beach"

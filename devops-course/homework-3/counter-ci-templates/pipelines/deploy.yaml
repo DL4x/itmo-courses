@@ -1,0 +1,65 @@
+stages:
+  - deploy
+
+variables:
+  GIT_CLONE_PATH: $CI_BUILDS_DIR/$CI_PROJECT_PATH_SLUG
+  COMPOSE_PROJECT_NAME: $CI_PROJECT_PATH_SLUG
+  HARBOR_HOST: harbor.devops-teta.ru
+  HARBOR_PROJECT: eshulpin
+  HARBOR_USER: robot_eshulpin+ci_push
+  HARBOR_PASSWORD: $__HARBOR_PASSWORD
+  KUBE_NAMESPACE: shulpin
+  HELM_RELEASE_NAME: counter
+
+default:
+  image: 
+    name: alpine/helm:latest
+    entrypoint: [""]
+  before_script:
+    - set -eu
+    - apk add --no-cache curl docker-cli
+    - |- 
+      curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+      chmod +x kubectl
+      mv kubectl /usr/local/bin/
+    - |- 
+      mkdir -p ~/.kube
+      echo "$KUBE_CONFIG" > ~/.kube/config
+      chmod 600 ~/.kube/config
+
+Deploy - Prom:
+  stage: deploy
+  tags:
+    - deploy
+    - prom
+  environment:
+    name: prom
+    deployment_tier: production
+  script:
+    - docker login -u $HARBOR_USER -p $HARBOR_PASSWORD $HARBOR_HOST
+    - |-
+      kubectl create secret docker-registry harbor-registry-secret \
+        --docker-server="$HARBOR_HOST" \
+        --docker-username="$HARBOR_USER" \
+        --docker-password="$HARBOR_PASSWORD" \
+        --namespace="$KUBE_NAMESPACE" \
+        --dry-run=client -o yaml | kubectl apply -f -
+    - |-
+      for script in $(find 'env' "env/$CI_ENVIRONMENT_NAME" -maxdepth 1 -type f -name '*.env'); do
+        printf >&2 'reading environment variables from %s\n' "$script"
+        eval "$(sed -e 's/^/export /' <"$script")"
+      done
+    - |-
+      export FRONTEND_TAG=$(echo "$counter_frontend_IMAGE" | cut -d: -f2)
+      export BACKEND_TAG=$(echo "$counter_backend_IMAGE" | cut -d: -f2)
+    - |-
+      helm upgrade --install $HELM_RELEASE_NAME . \
+        --namespace $KUBE_NAMESPACE \
+        --create-namespace \
+        --set frontend.image.tag=$FRONTEND_TAG \
+        --set backend.image.tag=$BACKEND_TAG \
+        --rollback-on-failure \
+        --timeout 10m \
+        --wait
+  rules:
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH

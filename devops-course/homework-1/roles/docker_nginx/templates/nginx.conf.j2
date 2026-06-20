@@ -1,0 +1,50 @@
+events {
+    worker_connections 1024;
+}
+
+http {
+    sendfile on;
+    tcp_nopush on;
+    types_hash_max_size 2048;
+
+    include /etc/nginx/mime.types;
+    default_type application/octet-stream;
+
+    access_log /var/log/nginx/access.log;
+    error_log /var/log/nginx/error.log;
+
+    gzip on;
+
+    server {
+        listen 80;
+        server_name {{ docker_nginx__server_name | default("_") }};
+
+        {% if docker_nginx__use_static %}
+        root {{ docker_nginx__static_dest }};
+        index index.html;
+        {% endif %}
+
+        location / {
+            try_files $uri $uri/ =404;
+        }
+    }
+
+    {% if docker_nginx__use_https %}
+    server {
+        listen 443 ssl;
+        server_name {{ docker_nginx__server_name | default("_") }};
+
+        ssl_certificate {{ docker_nginx__ssl_certs_dest }}/nginx.crt;
+        ssl_certificate_key {{ docker_nginx__ssl_private_dest }}/nginx.key;
+
+        {% if docker_nginx__use_static %}
+        root {{ docker_nginx__static_dest }};
+        index index.html;
+        {% endif %}
+
+        location / {
+            try_files $uri $uri/ =404;
+        }
+    }
+    {% endif %}
+}

@@ -1,0 +1,7 @@
+variables:
+  NODEJS_IMAGE: registry.devops-teta.ru/materials/ci/images/nodejs:18.18.2-bookworm
+  KANIKO_IMAGE: registry.devops-teta.ru/materials/ci/images/kaniko:1.9.1
+  NEXT_TELEMETRY_DISABLED: "1"
+  NPM_CONFIG_CACHE: $CI_PROJECT_DIR/.cache/npm
+  ENABLE_LINT: "true"
+  ENABLE_TESTS: "true"

@@ -1,0 +1,9 @@
+torch>=2.0
+torchvision>=0.15
+ultralytics>=8.0
+numpy
+Pillow
+opencv-python-headless
+h5py
+roboflow
+pyyaml

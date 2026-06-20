@@ -1,0 +1,144 @@
+{
+  "f1_macro": 0.6656211861511198,
+  "classification_report": {
+    "Beige": {
+      "precision": 0.631578947368421,
+      "recall": 0.6666666666666666,
+      "f1-score": 0.6486486486486487,
+      "support": 90.0
+    },
+    "Black": {
+      "precision": 0.9158504007123776,
+      "recall": 0.957635009310987,
+      "f1-score": 0.9362767410104689,
+      "support": 2148.0
+    },
+    "Blue": {
+      "precision": 0.9222756410256411,
+      "recall": 0.9041633935585232,
+      "f1-score": 0.9131297104323681,
+      "support": 1273.0
+    },
+    "Bronze": {
+      "precision": 0.5789473684210527,
+      "recall": 0.4489795918367347,
+      "f1-score": 0.5057471264367817,
+      "support": 49.0
+    },
+    "Brown": {
+      "precision": 0.6619718309859155,
+      "recall": 0.6861313868613139,
+      "f1-score": 0.6738351254480287,
+      "support": 137.0
+    },
+    "Burgundy": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1-score": 0.0,
+      "support": 1.0
+    },
+    "Gold": {
+      "precision": 0.4827586206896552,
+      "recall": 0.42424242424242425,
+      "f1-score": 0.45161290322580644,
+      "support": 33.0
+    },
+    "Green": {
+      "precision": 0.9,
+      "recall": 0.8461538461538461,
+      "f1-score": 0.8722466960352423,
+      "support": 117.0
+    },
+    "Grey": {
+      "precision": 0.8533519553072626,
+      "recall": 0.8599577762139339,
+      "f1-score": 0.8566421310900806,
+      "support": 1421.0
+    },
+    "Magenta": {
+      "precision": 0.5,
+      "recall": 1.0,
+      "f1-score": 0.6666666666666666,
+      "support": 1.0
+    },
+    "Maroon": {
+      "precision": 0.6666666666666666,
+      "recall": 0.5,
+      "f1-score": 0.5714285714285714,
+      "support": 4.0
+    },
+    "Multicolour": {
+      "precision": 0.5,
+      "recall": 0.06896551724137931,
+      "f1-score": 0.12121212121212122,
+      "support": 29.0
+    },
+    "Orange": {
+      "precision": 0.8255813953488372,
+      "recall": 0.8452380952380952,
+      "f1-score": 0.8352941176470589,
+      "support": 84.0
+    },
+    "Pink": {
+      "precision": 0.8,
+      "recall": 0.9230769230769231,
+      "f1-score": 0.8571428571428571,
+      "support": 13.0
+    },
+    "Purple": {
+      "precision": 0.7450980392156863,
+      "recall": 0.7037037037037037,
+      "f1-score": 0.7238095238095238,
+      "support": 54.0
+    },
+    "Red": {
+      "precision": 0.9445628997867804,
+      "recall": 0.9693654266958425,
+      "f1-score": 0.9568034557235421,
+      "support": 914.0
+    },
+    "Silver": {
+      "precision": 0.8946488294314381,
+      "recall": 0.9176672384219554,
+      "f1-score": 0.9060118543607113,
+      "support": 1166.0
+    },
+    "Turquoise": {
+      "precision": 1.0,
+      "recall": 0.25,
+      "f1-score": 0.4,
+      "support": 4.0
+    },
+    "Unlisted": {
+      "precision": 0.38095238095238093,
+      "recall": 0.10572687224669604,
+      "f1-score": 0.16551724137931034,
+      "support": 227.0
+    },
+    "White": {
+      "precision": 0.9444067796610169,
+      "recall": 0.9886444286728177,
+      "f1-score": 0.9660194174757282,
+      "support": 1409.0
+    },
+    "Yellow": {
+      "precision": 0.95,
+      "recall": 0.95,
+      "f1-score": 0.95,
+      "support": 100.0
+    },
+    "accuracy": 0.8964847962044425,
+    "macro avg": {
+      "precision": 0.7189834169320539,
+      "recall": 0.6674437285781829,
+      "f1-score": 0.6656211861511198,
+      "support": 9274.0
+    },
+    "weighted avg": {
+      "precision": 0.8854146590926699,
+      "recall": 0.8964847962044425,
+      "f1-score": 0.8881107700952555,
+      "support": 9274.0
+    }
+  }
+}

@@ -1,0 +1,15 @@
+variables:
+  PYTHON_IMAGE: python:3.11-slim
+
+.job__poetry_build:
+  image:
+    name: $PYTHON_IMAGE
+    entrypoint: [""]
+  before_script:
+    - pip install poetry poetry-plugin-export
+    - poetry config virtualenvs.create false
+  script:
+    - mkdir -p dist
+    - poetry export --without-hashes --format constraints.txt --output dist/constraints.txt
+    - poetry run python -m pip wheel --isolated --requirement dist/constraints.txt --wheel-dir dist/vendor
+    - poetry build --format wheel

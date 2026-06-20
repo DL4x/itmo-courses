@@ -1,0 +1,17 @@
+data_root: datasets/celeba/faces_mtcnn
+attrs_csv: datasets/celeba/list_attr_celeba.csv
+output_dir: outputs
+image_size: 64
+batch_size: 128
+num_workers: 4
+latent_dim: 128
+base_channels: 64
+epochs: 50
+lr: 0.0002
+betas: [0.0, 0.9]
+n_critic: 5
+lambda_gp: 10.0
+sample_every: 1
+save_every: 5
+max_images: 20000
+seed: 42

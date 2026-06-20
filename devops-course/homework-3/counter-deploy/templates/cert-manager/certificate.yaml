@@ -1,0 +1,22 @@
+{{- if .Values.global.certManager.enabled -}}
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: counter-tls
+  namespace: {{ .Release.Namespace }}
+  annotations:
+    meta.helm.sh/release-name: {{ .Release.Name }}
+    meta.helm.sh/release-namespace: {{ .Release.Namespace }}
+  labels:
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+spec:
+  secretName: counter-tls
+  privateKey:
+    rotationPolicy: Always
+  issuerRef:
+    name: {{ .Values.global.certManager.issuer }}
+    kind: ClusterIssuer
+  commonName: {{ .Values.global.domain }}
+  dnsNames:
+    - {{ .Values.global.domain }}
+{{- end }}

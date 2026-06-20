@@ -1,0 +1,4 @@
+docker_nginx__use_https: true
+docker_nginx__use_static: true
+
+docker_nginx__config_temp: /etc/nginx/nginx.new.conf

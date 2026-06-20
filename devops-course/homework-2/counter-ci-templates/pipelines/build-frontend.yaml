@@ -1,0 +1,87 @@
+include:
+  - local: variables/main.yaml
+  - local: jobs/kaniko.yaml
+  - local: rules/main.yaml
+  - local: jobs/npm.yaml
+  - local: jobs/dotenv-push.yaml
+
+stages:
+  - build
+  - publish
+  - deploy
+
+Update Cache:
+  stage: .pre
+  needs: []
+  script:
+    - !reference [.script__npm_clean_install]
+  extends: 
+    - .job__npm_build
+    - .npm_cache
+    - .rule__allow_falure
+  rules:
+    - !reference [.rule__enable_lint]
+    - !reference [.rule__on_merge_requests]
+    - !reference [.rule__on_default_branch] 
+
+Lint:
+  extends:
+    - .job__npm_build
+    - .rule__allow_falure    
+  stage: .pre
+  needs:
+    - job: Update Cache
+      artifacts: false
+  variables:
+    ESLINT_CODE_QUALITY_REPORT: eslint.codequality.json
+  script:
+    - !reference [.script__npm_clean_install]
+    - npm run lint -- --format gitlab
+  artifacts:
+    paths:
+      - $ESLINT_CODE_QUALITY_REPORT
+    reports:
+      codequality: $ESLINT_CODE_QUALITY_REPORT
+  rules:
+    - !reference [.rule__enable_lint]
+    - !reference [.rule__on_merge_requests]
+    - !reference [.rule__on_default_branch] 
+
+Build Package:
+  extends:
+    - .job__npm_build
+  stage: build
+  needs:
+    - job: Update Cache
+      artifacts: false
+  artifacts:
+    expire_in: 1h
+    paths:
+      - dist
+  rules:
+    - !reference [.rule__on_merge_requests]
+    - !reference [.rule__on_default_branch]
+    - !reference [.rule__on_release_tag] 
+
+Publish Package:
+  extends:
+  - .job__kaniko_publish_image
+  stage: publish
+  needs:
+    - job: Build Package
+      artifacts: true
+  interruptible: false
+  rules:
+    - !reference [.rule__on_default_branch] 
+    - !reference [.rule__on_release_tag] 
+
+Deploy Job:
+  stage: deploy
+  extends:
+    - .job__dotenv_push
+  needs:
+    - job: Publish Package
+      artifacts: true
+  rules:
+    - !reference [.rule__on_default_branch] 
+    - !reference [.rule__on_release_tag] 

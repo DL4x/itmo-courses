@@ -1,0 +1,5 @@
+- name: Install Nginx on vm1
+  hosts: vm1
+  become: true
+  roles:
+    - docker_nginx

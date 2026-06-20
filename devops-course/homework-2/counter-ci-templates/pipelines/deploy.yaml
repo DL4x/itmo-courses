@@ -1,0 +1,52 @@
+stages:
+  - deploy
+  - rollback
+
+variables:
+  GIT_CLONE_PATH: $CI_BUILDS_DIR/$CI_PROJECT_PATH_SLUG
+  COMPOSE_PROJECT_NAME: $CI_PROJECT_PATH_SLUG
+  HARBOR_HOST: harbor.devops-teta.ru
+  HARBOR_PROJECT: eshulpin
+  HARBOR_USER: robot_eshulpin+ci_push
+  HARBOR_PASSWORD: $__HARBOR_PASSWORD
+
+default:
+  before_script:
+    - set -eu
+
+Deploy - Prom:
+  stage: deploy
+  tags:
+    - deploy
+    - prom
+  environment:
+    name: prom
+    deployment_tier: production
+  script:
+    - docker login -u $HARBOR_USER -p $HARBOR_PASSWORD $HARBOR_HOST
+    - |-
+      for script in $(find 'env' "env/$CI_ENVIRONMENT_NAME" -maxdepth 1 -type f -name '*.env'); do
+        printf >&2 'reading environment variables from %s\n' "$script"
+        eval "$(sed -e 's/^/export /' <"$script")"
+      done
+    - docker-compose up --remove-orphans --detach
+  rules:
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+
+Rollback - Prom:
+  stage: rollback
+  tags:
+    - deploy
+    - prom
+  environment:
+    name: prom
+    deployment_tier: production
+  script:
+    - docker login -u $HARBOR_USER -p $HARBOR_PASSWORD $HARBOR_HOST
+    - docker-compose down
+    - export counter_frontend_IMAGE="$HARBOR_HOST/$HARBOR_PROJECT/counter-frontend:${ROLLBACK_FRONTEND}"
+    - export counter_backend_IMAGE="$HARBOR_HOST/$HARBOR_PROJECT/counter-backend:${ROLLBACK_BACKEND}"
+    - docker-compose up --remove-orphans --detach
+  rules:
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+  when: manual

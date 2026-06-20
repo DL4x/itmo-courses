@@ -1,0 +1,89 @@
+global:
+  imagePullSecrets:
+    - name: harbor-registry-secret
+  domain: shulpin.kube.itmo.devops-teta.ru
+  certManager:
+    enabled: true
+    issuer: letsencrypt
+    server: https://acme-v02.api.letsencrypt.org/directory
+
+backend:
+  enabled: true
+  replicaCount: 1
+  image:
+    repository: harbor.devops-teta.ru/eshulpin/counter-backend
+    tag: latest
+    pullPolicy: IfNotPresent
+  service:
+    type: ClusterIP
+    port: 8080
+  resources:
+    requests:
+      memory: 128Mi
+      cpu: 100m
+    limits:
+      memory: 256Mi
+      cpu: 500m
+  livenessProbe:
+    httpGet:
+      path: /api/counter
+      port: 8080
+    initialDelaySeconds: 60
+    periodSeconds: 10
+  readinessProbe:
+    httpGet:
+      path: /api/counter
+      port: 8080
+    initialDelaySeconds: 20
+    periodSeconds: 5
+
+frontend:
+  enabled: true
+  replicaCount: 1
+  image:
+    repository: harbor.devops-teta.ru/eshulpin/counter-frontend
+    tag: latest
+    pullPolicy: IfNotPresent
+  service:
+    type: ClusterIP
+    port: 3000
+  resources:
+    requests:
+      memory: 64Mi
+      cpu: 50m
+    limits:
+      memory: 128Mi
+      cpu: 200m
+  livenessProbe:
+    httpGet:
+      path: /
+      port: 3000
+    initialDelaySeconds: 30
+    periodSeconds: 10
+  readinessProbe:
+    httpGet:
+      path: /
+      port: 3000
+    initialDelaySeconds: 5
+    periodSeconds: 5
+
+ingress:
+  enabled: true
+  className: nginx
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+  hosts:
+    - host: shulpin.kube.itmo.devops-teta.ru
+      paths:
+        - path: /
+          pathType: Prefix
+  tls:
+    - secretName: counter-tls
+      hosts:
+        - shulpin.kube.itmo.devops-teta.ru
+
+affinity:
+  nodeNames:
+    - kube-minion-01
+    - kube-minion-02
