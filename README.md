@@ -15,3 +15,5 @@
 - ### <a href="parallel-programming-course">Курс &laquo;Параллельное программирование&raquo;</a>
 - ### <a href="functional-programming-course">Курс &laquo;Функциональное программирование&raquo;</a>
 - ### <a href="machine-learning-course">Курс &laquo;Машинное обучение&raquo;</a>
+- ### <a href="devops-course">Курс &laquo;DevOps&raquo;</a>
+- ### <a href="computer-vision-course">Курс &laquo;Компьютерное зрение&raquo;</a>
